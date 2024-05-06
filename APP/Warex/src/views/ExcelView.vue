@@ -1,6 +1,6 @@
 <template>
     <div>
-      HOME
+        EXCEL
     </div>
 </template>
 
