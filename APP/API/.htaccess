@@ -1,16 +1,13 @@
 RewriteEngine On
 
-#------- Quitar la ext .php de las URL -------#
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php
 
-#------- Quitar la ext .html de las URL -------#
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html
 
-#------- Si el recurso no existe, redireccionar a index.php con el parámetro table -------#
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^/]+)/?$ index.php?table=$1 [QSA,L]
