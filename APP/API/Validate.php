@@ -1,13 +1,16 @@
 <?php
+//Importamos la clase Response y la clase Database
 require_once 'Response.php';
 require_once 'Database.php';
 
 class Validate extends Database
 {
 
+	//REPLANTEAR DOMINGO
 
 	private $tables = array('access', 'companies', 'warehouses', 'section', 'shelf', 'location', 'products');
 
+	//indicamos los parámetros válidos para las peticiones get mediante un array
 	private $accessGetFields = array('DNI','Name','LastName','UserName','Password','Permissions','CompanyID');
 	private $companyGetFields = array('NIF','CompanyName');
 	private $warehousesGetFields = array('WarehouseID','CompanyID','TotalProductQuantity','RefrigeratingChamber');
@@ -16,6 +19,7 @@ class Validate extends Database
 	private $locationGetFields = array('WarehouseID','ProductID','SectionID','ShelfID','TotalProductQuantity');
 	private $productGetFields = array('ProductID','ProductName','TotalProductQuantity','Description','UnitPrice','ExpiryDate');
 
+	//indicamos los parámetros válidos para las peticiones post y put mediante un array
 	private $accessPutFields = array('Name','LastName','UserName','Password','Permissions');
 	private $companyPutFields = array('CompanyName',);
 	private $warehousesPutFields = array('TotalProductQuantity','RefrigeratingChamber');
@@ -25,11 +29,39 @@ class Validate extends Database
 	private $productPutFields = array('ProductName','TotalProductQuantity','Description','UnitPrice','ExpiryDate');
 
 
+	private function validate($data){
+		//si no existe el parámetro nombre...
+		if(!isset($data['CompanyName']) || empty($data['CompanyName'])){
+			//... genera la respuesta de error
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo nombre es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		//si existe el parámetro disponible y es diferente a 1 o 0....
+		if(isset($data['disponible']) && !($data['disponible'] == "1" || $data['disponible'] == "0")){
+			//... genera la respuesta de error
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo disponible debe ser del tipo boolean'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		
+		return true;
+	}
+
 	public function get($table, $params){
 		$responseError = array(
 			'result' => 'error',
 			'details' => 'Error en la solicitud'
 		);
+		// SI LA TABLA NO EXISTE O EL PARÁMETRO NO EXISTE EN LA TABLA
 		if(!in_array($table, $this->tables) || !$this->validateGetParams($table, $params)){
 			Response::result(400, $responseError);
 			exit;
@@ -44,6 +76,7 @@ class Validate extends Database
 			'result' => 'error',
 			'details' => 'Error en la solicitud'
 		);
+				// SI LA TABLA NO EXISTE O EL PARÁMETRO NO EXISTE EN LA TABLA
 		if(!in_array($table, $this->tables) || !$this->validateGetParams($table, $params)){
 			Response::result(400, $responseError);
 			exit;
@@ -53,20 +86,41 @@ class Validate extends Database
 	}
 
 
-	public function update($table, $params, $data){
-		$responseError = array(
-			'result' => 'error',
-			'details' => 'Error en la solicitud'
-		);
-		if(!in_array($table, $this->tables) || !$this->validateGetParams($table, $params) || !$this->validateGetParams($table, $data)){
-			Response::result(400, $responseError);
-			exit;
+	public function update($id, $params){
+		//recorremos los parámetros
+		foreach ($params as $key => $parm) {
+			//si no son válidos
+			if(!in_array($key, $this->allowedConditions_insert_update)){
+				//eliminamos
+				unset($params[$key]);
+				//generamos la respuesta de error y devolvemos
+				$response = array(
+					'result' => 'error',
+					'details' => 'Error en la solicitud'
+				);
+	
+				Response::result(400, $response);
+				exit;
+			}
 		}
+		//si son parámetros válidos
+		if($this->validate($params)){
+			//realizamos la actualización en BD pasando los parámetros y el id de la tupla
+			$affected_rows = parent::updateDB($this->table, $id, $params);
+			//si no se actualizó, generamos la respuesta
+			if($affected_rows==0){
+				$response = array(
+					'result' => 'error',
+					'details' => 'No hubo cambios'
+				);
 
-		return parent::updateDB($table, $params, $data);
+				Response::result(200, $response);
+				exit;
+			}
+		}
 	}
 
-	public function delete($table, $params)	{ //CONTROLAR QUE SI NO HAY PARAMETROS, LANCE ERROR
+	public function delete($table, $params)	{
 		
 		if(!in_array($table, $this->tables)){
 			$response = array(
@@ -99,6 +153,7 @@ class Validate extends Database
 					}
 				}
 				return true;
+				break;
 			case 'companies':
 				foreach ($params as $key => $param) {
 					if(!in_array($key, $this->companyGetFields)){
@@ -107,6 +162,7 @@ class Validate extends Database
 					}
 				}
 				return true;
+				break;
 			case 'warehouses':
 				foreach ($params as $key => $param) {
 					if(!in_array($key, $this->warehousesGetFields)){
@@ -115,6 +171,7 @@ class Validate extends Database
 					}
 				}
 				return true;
+				break;
 
 			case 'section':
 				foreach ($params as $key => $param) {
@@ -124,8 +181,8 @@ class Validate extends Database
 					}
 				}
 				return true;
-
-				case 'shelf':
+				break;
+			case 'shelf':
 				foreach ($params as $key => $param) {
 					if(!in_array($key, $this->shelfGetFields)){
 						unset($params[$key]);						
@@ -133,8 +190,8 @@ class Validate extends Database
 					}
 				}
 				return true;
-
-				case 'location':
+				break;
+			case 'location':
 				foreach ($params as $key => $param) {
 					if(!in_array($key, $this->locationGetFields)){
 						unset($params[$key]);						
@@ -142,8 +199,8 @@ class Validate extends Database
 					}
 				}
 				return true;
-
-				case 'products':
+				break;
+			case 'products':
 				foreach ($params as $key => $param) {
 					if(!in_array($key, $this->productGetFields)){
 						unset($params[$key]);						
@@ -151,77 +208,14 @@ class Validate extends Database
 					}
 				}
 				return true;
-
-				
-			default:
-				return false;
-			}
-	}
-
-	public function validatePutParams($table, $params){
-		switch ($table) {
-			case 'access':
-				foreach ($params as $key => $param) {
-					if(!in_array($key, $this->accessPutFields)){
-						unset($params[$key]);						
-						return false;
-					}
-				}
-				return true;
-			case 'companies':
-				foreach ($params as $key => $param) {
-					if(!in_array($key, $this->companyPutFields)){
-						unset($params[$key]);						
-						return false;
-					}
-				}
-				return true;
-			case 'warehouses':
-				foreach ($params as $key => $param) {
-					if(!in_array($key, $this->warehousesPutFields)){
-						unset($params[$key]);						
-						return false;
-					}
-				}
-				return true;
-
-			case 'section':
-				foreach ($params as $key => $param) {
-					if(!in_array($key, $this->sectionPutFields)){
-						unset($params[$key]);						
-						return false;
-					}
-				}
-				return true;
-			case 'shelf':
-				foreach ($params as $key => $param) {
-					if(!in_array($key, $this->shelfPutFields)){
-						unset($params[$key]);						
-						return false;
-					}
-				}
-				return true;
-			case 'location':
-				foreach ($params as $key => $param) {
-					if(!in_array($key, $this->locationPutFields)){
-						unset($params[$key]);						
-						return false;
-					}
-				}
-				return true;
-			case 'products':
-				foreach ($params as $key => $param) {
-					if(!in_array($key, $this->productPutFields)){
-						unset($params[$key]);						
-						return false;
-					}
-				}
-				return true;
+				break;
 
 			default:
 				return false;
+				break;
 		}
 	}
+
 }
 
 ?>
