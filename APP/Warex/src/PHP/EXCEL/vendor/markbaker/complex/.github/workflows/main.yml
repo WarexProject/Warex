@@ -1,5 +1,5 @@
 name: main
-on: [ push, pull_request ]
+on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -58,9 +58,9 @@ jobs:
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: "Run PHPUnit tests (Experimental: ${{ matrix.experimental }})"
+      - name: 'Run PHPUnit tests (Experimental: ${{ matrix.experimental }})'
         env:
-          FAILURE_ACTION: "${{ matrix.experimental == true }}"
+          FAILURE_ACTION: '${{ matrix.experimental == true }}'
         run: vendor/bin/phpunit --verbose || $FAILURE_ACTION
 
   phpcs:
