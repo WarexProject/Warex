@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+
+:root {
+    --color-blue-electric: #3A61F7;
+    --color-blue-userLink: #5694f0;
+    --color-blue-middle: #64708B;
+    --color-blue-ultralight: #EEF0F8;
+    --color-gray-dark: #212121;
+    --color-gray-medium: #484C5A;
+    --color-gray-middle: #9DA3B5;
+    --color-gray-ultralight: #E6E8EC;
+    --color-red: #DC2843;
+    --color-green: #08cc74;
+    --color-green-light: #60ca9a;
+    --color-orange: rgb(255, 185, 56);
+    --color-orange-dark: #ff7f00;
+ }
+
+ /*General*/
+
+
+.full{
+  width: 100%;
+  height: 100%;
+  font-family: 'Outfit', sans-serif;
+}
+
+#app{
+  width: 100%;
+  height: 100%;
+  font-family: 'Outfit', sans-serif;
+  color: #1E1E1E ;
+}
+
+/*CONTAINERS*/
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+html, body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
+}
+
+button, input, select{
+  font-family: 'Outfit', sans-serif;
+}
+
+body{
+  background-color: var(--color-blue-ultralight);
+}
+
+.view{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+
+
+ 
