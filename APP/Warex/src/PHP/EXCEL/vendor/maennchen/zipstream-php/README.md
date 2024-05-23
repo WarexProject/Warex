@@ -132,11 +132,11 @@ status.
 Careful: Always check the `README` on `main` for up-to-date information.
 
 | Version | New Features | Bugfixes | Security |
-|---------|--------------|----------|----------|
-| *3*     | ✓            | ✓        | ✓        |
-| *2*     | ✗            | ✓        | ✓        |
-| *1*     | ✗            | ✗        | ✓        |
-| *0*     | ✗            | ✗        | ✗        |
+| ------- | ------------ | -------- | -------- |
+| _3_     | ✓            | ✓        | ✓        |
+| _2_     | ✗            | ✓        | ✓        |
+| _1_     | ✗            | ✗        | ✓        |
+| _0_     | ✗            | ✗        | ✗        |
 
 This library aligns itself with the PHP core support. New features and bugfixes
 will only target PHP versions according to their current status.

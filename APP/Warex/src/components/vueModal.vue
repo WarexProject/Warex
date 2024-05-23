@@ -10,41 +10,42 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
   show: {
     type: Boolean,
     required: true
   }
-});
+})
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 
 function close() {
-  emit('close');
+  emit('close')
 }
 </script>
 
 <style scoped>
 :root {
-    --color-blue-electric: #3A61F7;
-    --color-blue-userLink: #5694f0;
-    --color-blue-middle: #64708B;
-    --color-blue-ultralight: #EEF0F8;
-    --color-gray-dark: #212121;
-    --color-gray-medium: #484C5A;
-    --color-gray-middle: #9DA3B5;
-    --color-gray-ultralight: #E6E8EC;
-    --color-red: #DC2843;
-    --color-green: #08cc74;
-    --color-green-light: #60ca9a;
-    --color-orange: rgb(255, 185, 56);
-    --color-orange-dark: #ff7f00;
+  --color-blue-electric: #3a61f7;
+  --color-blue-userLink: #5694f0;
+  --color-blue-middle: #64708b;
+  --color-blue-ultralight: #eef0f8;
+  --color-gray-dark: #212121;
+  --color-gray-medium: #484c5a;
+  --color-gray-middle: #9da3b5;
+  --color-gray-ultralight: #e6e8ec;
+  --color-red: #dc2843;
+  --color-green: #08cc74;
+  --color-green-light: #60ca9a;
+  --color-orange: rgb(255, 185, 56);
+  --color-orange-dark: #ff7f00;
 }
 
 .modal-overlay {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
+    Verdana, sans-serif;
   position: fixed;
   top: 0;
   left: 0;
@@ -72,7 +73,8 @@ function close() {
 
 .close-button {
   text-decoration: none;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
+    Verdana, sans-serif;
   font-weight: bold;
   font-size: 20px;
   background-color: var(--color-red);

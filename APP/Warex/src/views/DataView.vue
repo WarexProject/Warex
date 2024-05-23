@@ -21,7 +21,7 @@
         </select>
       </div>
       <div class="row">
-        <img src="https://via.placeholder.com/100" alt="Imagen pequeña">
+        <img src="https://via.placeholder.com/100" alt="Imagen pequeña" />
       </div>
     </div>
     <div class="third-cell">
@@ -50,16 +50,16 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 // Aquí puedes agregar tu lógica de Vue si es necesario
 </script>
 
 <style scoped>
 .container {
   display: grid;
-  grid-template-areas: 
-    "first-cell second-cell"
-    "third-cell third-cell";
+  grid-template-areas:
+    'first-cell second-cell'
+    'third-cell third-cell';
   grid-template-rows: 0.5fr 1.5fr;
   grid-template-columns: 2fr 1fr;
   height: 100vh;
@@ -127,7 +127,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;

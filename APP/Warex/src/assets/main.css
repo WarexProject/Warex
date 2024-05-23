@@ -1,26 +1,26 @@
 :root {
-    --color-blue-electric: #3A61F7;
-    --color-blue-userLink: #5694f0;
-    --color-blue-middle: #64708B;
-    --color-blue-ultralight: #EEF0F8;
-    --color-gray-dark: #212121;
-    --color-gray-medium: #484C5A;
-    --color-gray-middle: #9DA3B5;
-    --color-gray-ultralight: #E6E8EC;
-    --color-red: #DC2843;
-    --color-green: #08cc74;
-    --color-green-light: #60ca9a;
-    --color-orange: rgb(255, 185, 56);
-    --color-orange-dark: #ff7f00;
- }
+  --color-blue-electric: #3a61f7;
+  --color-blue-userLink: #5694f0;
+  --color-blue-middle: #64708b;
+  --color-blue-ultralight: #eef0f8;
+  --color-gray-dark: #212121;
+  --color-gray-medium: #484c5a;
+  --color-gray-middle: #9da3b5;
+  --color-gray-ultralight: #e6e8ec;
+  --color-red: #dc2843;
+  --color-green: #08cc74;
+  --color-green-light: #60ca9a;
+  --color-orange: rgb(255, 185, 56);
+  --color-orange-dark: #ff7f00;
+}
 
- /*General*/
+/*General*/
 
- body {
-    background-color: var(--color-blue-ultralight);
- }
+body {
+  background-color: var(--color-blue-ultralight);
+}
 
- header {
+header {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -35,7 +35,7 @@
 .userMenu {
   display: none;
   position: absolute;
-  right: 0; 
+  right: 0;
   background-color: var(--color-green-light);
   color: white;
   border-radius: 4px;
@@ -89,30 +89,29 @@
 .userMenu:hover {
   display: block;
 }
- .div-title {
+.div-title {
   width: 100%;
   display: block;
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   text-align: center;
- }
+}
 
- .slogan {
-  font-family:monospace;
-  font-size: 14px; 
-  color: var(--color-gray-dark); 
-  margin-top: -35px; 
-  text-align: center; 
-  line-height: 1.2; 
+.slogan {
+  font-family: monospace;
+  font-size: 14px;
+  color: var(--color-gray-dark);
+  margin-top: -35px;
+  text-align: center;
+  line-height: 1.2;
   margin-left: 130px;
-
 }
 
 .userLink {
   background-color: var(--color-green-light);
   color: white;
-  transition: background-color 0.3s ease; 
+  transition: background-color 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -122,69 +121,66 @@
   border: 2px solid #ffffff;
   color: #ffffff;
   text-decoration: none;
-  margin-top:-60px;
+  margin-top: -60px;
   margin-left: 10px;
- }
+}
 
- .userIcon {
+.userIcon {
   font-size: 15px;
 }
 
 .main-container {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
 }
 
+/*Menú principal*/
 
- /*Menú principal*/
+.wrapper {
+  background-color: var(--color-green-light);
+  border-radius: 20px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
 
- .wrapper {
-   background-color: var(--color-green-light);
-   border-radius: 20px;
-   margin-top:5px;
-   margin-bottom: 20px;
-   display: flex;
-   flex-direction:column;
-   flex-wrap:wrap;
- }
- 
- .mainMenu {
-   display: flex;
-   justify-content: space-around; 
-   width: 100%; 
-   background-color: var(--color-green-light);
-   border-radius: 20px;
-   margin-bottom: 15px;
- }
+.mainMenu {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background-color: var(--color-green-light);
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
 
 .navLink {
-   text-decoration: none;
-   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-   padding: 10px 5px;
-   border-radius: 5px;
-   background-color: var(--color-green-light);
-   color: white;
-   transition: background-color 0.3s ease; 
-   width: 25%;
-   text-align: center;
-   border-radius: 20px;
- }
- 
- .navLink:hover {
-   background-color: var(--color-orange);
-   color: var(--color-green); 
- }
+  text-decoration: none;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  padding: 10px 5px;
+  border-radius: 5px;
+  background-color: var(--color-green-light);
+  color: white;
+  transition: background-color 0.3s ease;
+  width: 25%;
+  text-align: center;
+  border-radius: 20px;
+}
 
- .icono-db{
-  margin-right: 5px;
- }
-
- .userLink:hover {
+.navLink:hover {
   background-color: var(--color-orange);
-  color: var(--color-green); 
- }
+  color: var(--color-green);
+}
 
- 
+.icono-db {
+  margin-right: 5px;
+}
+
+.userLink:hover {
+  background-color: var(--color-orange);
+  color: var(--color-green);
+}

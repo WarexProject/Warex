@@ -1,6 +1,4 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-export const infoUser = defineStore('infoUser', () => {
-  
-})
+export const infoUser = defineStore('infoUser', () => {})

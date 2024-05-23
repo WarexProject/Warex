@@ -1,4 +1,3 @@
-
 # Table of content
 
-* [API Reference](README.md#class-methods)
+- [API Reference](README.md#class-methods)

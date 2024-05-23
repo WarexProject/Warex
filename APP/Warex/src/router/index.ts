@@ -7,7 +7,6 @@ import UserView from '@/views/UserView.vue'
 import ExcelView from '@/views/ExcelView.vue'
 import StatsView from '@/views/StatsView.vue'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -45,7 +44,7 @@ const router = createRouter({
       path: '/stats',
       name: 'stats',
       component: StatsView
-    },
+    }
   ]
 })
 

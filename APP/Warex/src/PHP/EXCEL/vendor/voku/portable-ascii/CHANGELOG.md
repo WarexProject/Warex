@@ -20,13 +20,13 @@
 ### 1.6.0 (2022-01-24)
 
 - prefer "Russian - Passport (2013), ICAO" instead of "Russian - GOST 7.79-2000(B)"
-- fix "Ukrainian" char-mapping (thanks to @Andr1yk0) 
-- fix "Persian" char-mapping (thanks to @frost-cyber) 
+- fix "Ukrainian" char-mapping (thanks to @Andr1yk0)
+- fix "Persian" char-mapping (thanks to @frost-cyber)
 - fix "ASCII::normalize_whitespace()" -> "CARRIAGE RETURN" is more like "<br>" and no "\n"
 - add "ASCII::to_ascii_remap()" -> this method will return broken characters and is only for special cases
 
 ### 1.5.6 (2020-11-12)
-    
+
 - "ASCII::normalize_whitespace()" -> can now also remove "control characters" if needed v2
 
 ### 1.5.5 (2020-11-12)
@@ -54,7 +54,7 @@
 
 - fix merge ASCII transliterations from "avian2/unidecode" (python)
   -> https://github.com/avian2/unidecode/
-  
+
 ### 1.5.0 (2020-05-24)
 
 - merge ASCII transliterations from "avian2/unidecode" (python)
@@ -117,8 +117,8 @@
 
 ### 1.3.6 (2019-12-13)
 
-- "ascii_extras" -> convert the static content into ascii 
-   -> e.g.: instead of replacing "+" with "più" we use "piu" (Italian), because we want to use ascii anyway
+- "ascii_extras" -> convert the static content into ascii
+  -> e.g.: instead of replacing "+" with "più" we use "piu" (Italian), because we want to use ascii anyway
 
 ### 1.3.5 (2019-11-11)
 
@@ -154,7 +154,7 @@
 - add transliteration "it"
 - add transliteration "mk"
 - add transliteration "pt"
-- add constants -> ASCII::*LANGUAGE_CODES
+- add constants -> ASCII::\*LANGUAGE_CODES
 - add more special latin chars / (currency) symbols
 - add simple tests for all supported languages
 - optimize "Russian" to ASCII (via "translit.ru")
@@ -164,7 +164,7 @@
 - "ASCII::to_transliterate" -> use "transliterator_create" + static cache
 - "ASCII::to_ascii" -> fix "remove unsupported chars"
 - "ASCII::to_ascii" -> add some more special chars
-- run/fix static analyse via "pslam" + "phpstan" 
+- run/fix static analyse via "pslam" + "phpstan"
 - auto fix code style via "php-cs-fixer"
 - fix transliteration for "german"
 - fix transliteration for "persian" (thanks @mardep)
@@ -187,7 +187,7 @@
 
 ### 1.2.1 (2019-09-07)
 
-- "charsArray()" -> add access to "ASCII::$ASCII_MAPS*""
+- "charsArray()" -> add access to "ASCII::$ASCII_MAPS\*""
 
 ### 1.2.0 (2019-09-07)
 

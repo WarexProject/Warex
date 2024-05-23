@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### BREAKING CHANGE
 
 - Typing was strengthened by leveraging native typing. This should not change any behavior. However, if you implement
-  any interfaces or inherit from any classes, you will need to adapt your typing accordingly. If you use static analysis 
+  any interfaces or inherit from any classes, you will need to adapt your typing accordingly. If you use static analysis
   tools such as PHPStan or Psalm, new errors might be found. If you find actual bugs because of the new typing, please
   open a PR that fixes it with a **detailed** explanation of the reason. We'll try to merge and release typing-related
   fixes quickly in the coming days. [PR #3718](https://github.com/PHPOffice/PhpSpreadsheet/pull/3718)
@@ -173,7 +173,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 - Improved handling for @ placeholder in Number Format Masks [PR #3344](https://github.com/PHPOffice/PhpSpreadsheet/pull/3344)
 - Improved handling for ? placeholder in Number Format Masks [PR #3394](https://github.com/PHPOffice/PhpSpreadsheet/pull/3394)
-- Improved support for locale settings and currency codes when matching formatted strings to numerics in the Calculation Engine [PR #3373](https://github.com/PHPOffice/PhpSpreadsheet/pull/3373) and [PR #3374](https://github.com/PHPOffice/PhpSpreadsheet/pull/3374) 
+- Improved support for locale settings and currency codes when matching formatted strings to numerics in the Calculation Engine [PR #3373](https://github.com/PHPOffice/PhpSpreadsheet/pull/3373) and [PR #3374](https://github.com/PHPOffice/PhpSpreadsheet/pull/3374)
 - Improved support for locale settings and matching in the Advanced Value Binder [PR #3376](https://github.com/PHPOffice/PhpSpreadsheet/pull/3376)
 - `toFormattedString` will now always return a string. This can affect the results of `toArray`, `namedRangeToArray`, and `rangeToArray`. [PR #3304](https://github.com/PHPOffice/PhpSpreadsheet/pull/3304)
 - Value of constants FORMAT_CURRENCY_EUR and FORMAT_CURRENCY_USD is changed. [Issue #3577](https://github.com/PHPOffice/PhpSpreadsheet/issues/3577) [PR #3377](https://github.com/PHPOffice/PhpSpreadsheet/pull/3377)
@@ -219,7 +219,6 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 - Fix Composer --dev dependency issue with dealerdirect/phpcodesniffer-composer-installer renaming their `master` branch to `main`
 
-
 ## 1.27.0 - 2023-01-24
 
 ### Added
@@ -250,7 +249,6 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Honor Fit to 1-Page Height Html/Pdf [Issue #3266](https://github.com/PHPOffice/PhpSpreadsheet/issues/3266) [PR #3279](https://github.com/PHPOffice/PhpSpreadsheet/pull/3279)
 - AND/OR/XOR Handling of Literal Strings [PR #3287](https://github.com/PHPOffice/PhpSpreadsheet/pull/3287)
 - Xls Reader Vertical Break and Writer Page Order [Issue #3305](https://github.com/PHPOffice/PhpSpreadsheet/issues/3305) [PR #3306](https://github.com/PHPOffice/PhpSpreadsheet/pull/3306)
-
 
 ## 1.26.0 - 2022-12-21
 
@@ -302,7 +300,6 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - More Detail for Cyclic Error Messages [Issue #3169](https://github.com/PHPOffice/PhpSpreadsheet/issues/3169) [PR #3170](https://github.com/PHPOffice/PhpSpreadsheet/pull/3170)
 - Improved Documentation for Deprecations - many PRs [Issue #3162](https://github.com/PHPOffice/PhpSpreadsheet/issues/3162)
 
-
 ## 1.25.2 - 2022-09-25
 
 ### Added
@@ -324,7 +321,6 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Fixed
 
 - Composer dependency clash with ezyang/htmlpurifier
-
 
 ## 1.25.0 - 2022-09-25
 
@@ -348,7 +344,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 - Axis getLineProperty deprecated in favor of getLineColorProperty.
 - Moved majorGridlines and minorGridlines from Chart to Axis. Setting either in Chart constructor or through Chart methods, or getting either using Chart methods is deprecated.
-- Chart::EXCEL_COLOR_TYPE_* copied from Properties to ChartColor; use in Properties is deprecated.
+- Chart::EXCEL*COLOR_TYPE*\* copied from Properties to ChartColor; use in Properties is deprecated.
 - ChartColor::EXCEL_COLOR_TYPE_ARGB deprecated in favor of EXCEL_COLOR_TYPE_RGB ("A" component was never allowed).
 - Misspelled Properties::LINE_STYLE_DASH_SQUERE_DOT deprecated in favor of LINE_STYLE_DASH_SQUARE_DOT.
 - Clone not permitted for Spreadsheet. Spreadsheet->copy() can be used instead.
@@ -435,6 +431,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Memory and speed improvements, particularly for the Cell Collection, and the Writers.
 
   See [the Discussion section on github](https://github.com/PHPOffice/PhpSpreadsheet/discussions/2821) for details of performance across versions
+
 - Improved performance for removing rows/columns from a worksheet
 
 ### Deprecated
@@ -497,6 +494,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
   This is determined by the Calculation Engine locale setting.
 
   (i.e. `"Vrai"` wil be converted to a boolean `true` if the Locale is set to `fr`.)
+
 - Allow `psr/simple-cache` 2.x
 
 ### Deprecated
@@ -506,6 +504,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 
   These functions now accept either a cell address string (`'E3')` or an array with columnId and rowId (`[5, 3]`) or a new `CellAddress` object as their `cellAddress`/`coordinate` argument.
   This includes the methods:
+
   - `setCellValueByColumnAndRow()` use the equivalent `setCellValue()`
   - `setCellValueExplicitByColumnAndRow()` use the equivalent `setCellValueExplicit()`
   - `getCellByColumnAndRow()` use the equivalent `getCell()`
@@ -544,6 +543,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
   Note that this method is used when translating Excel functions between `en_us` and other locale languages, as well as when converting formulae between different spreadsheet formats (e.g. Ods to Excel).
 
   Nor is this a perfect solution, as there may still be issues when function calls have array arguments that themselves contain function calls; but it's still better than the current logic.
+
 - Fix for escaping double quotes within a formula [Issue #1971](https://github.com/PHPOffice/PhpSpreadsheet/issues/1971) [PR #2651](https://github.com/PHPOffice/PhpSpreadsheet/pull/2651)
 - Change open mode for output from `wb+` to `wb` [Issue #2372](https://github.com/PHPOffice/PhpSpreadsheet/issues/2372) [PR #2657](https://github.com/PHPOffice/PhpSpreadsheet/pull/2657)
 - Use color palette if supplied [Issue #2499](https://github.com/PHPOffice/PhpSpreadsheet/issues/2499) [PR #2595](https://github.com/PHPOffice/PhpSpreadsheet/pull/2595)
@@ -558,16 +558,19 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 ### Added
 
 - Namespacing phase 2 - styles.
-[PR #2471](https://github.com/PHPOffice/PhpSpreadsheet/pull/2471)
+  [PR #2471](https://github.com/PHPOffice/PhpSpreadsheet/pull/2471)
 
 - Improved support for passing of array arguments to Excel function implementations to return array results (where appropriate). [Issue #2551](https://github.com/PHPOffice/PhpSpreadsheet/issues/2551)
 
   This is the first stage in an ongoing process of adding array support to all appropriate function implementations,
+
 - Support for the Excel365 Math/Trig SEQUENCE() function [PR #2536](https://github.com/PHPOffice/PhpSpreadsheet/pull/2536)
 - Support for the Excel365 Math/Trig RANDARRAY() function [PR #2540](https://github.com/PHPOffice/PhpSpreadsheet/pull/2540)
 
   Note that the Spill Operator is not yet supported in the Calculation Engine; but this can still be useful for defining array constants.
+
 - Improved support for Conditional Formatting Rules [PR #2491](https://github.com/PHPOffice/PhpSpreadsheet/pull/2491)
+
   - Provide support for a wider range of Conditional Formatting Rules for Xlsx Reader/Writer:
     - Cells Containing (cellIs)
     - Specific Text (containing, notContaining, beginsWith, endsWith)
@@ -623,7 +626,6 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Fix discrepancy between the way markdown tables are rendered in ReadTheDocs and in PHPStorm [#2520](https://github.com/PHPOffice/PhpSpreadsheet/issues/2520)
 - Update Russian Functions Text File [#2557](https://github.com/PHPOffice/PhpSpreadsheet/issues/2557)
 - Fix documentation, instantiation example [#2564](https://github.com/PHPOffice/PhpSpreadsheet/issues/2564)
-
 
 ## 1.21.0 - 2022-01-06
 
@@ -709,7 +711,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Phase 1 of better namespace handling for Xlsx, resolving many open issues [PR #2173](https://github.com/PHPOffice/PhpSpreadsheet/pull/2173) [PR #2204](https://github.com/PHPOffice/PhpSpreadsheet/pull/2204) [PR #2303](https://github.com/PHPOffice/PhpSpreadsheet/pull/2303)
 - Add ability to extract images if source is a URL [Issue #1997](https://github.com/PHPOffice/PhpSpreadsheet/issues/1997) [PR #2072](https://github.com/PHPOffice/PhpSpreadsheet/pull/2072)
 - Support for passing flags in the Reader `load()` and Writer `save()`methods, and through the IOFactory, to set behaviours [PR #2136](https://github.com/PHPOffice/PhpSpreadsheet/pull/2136)
-    - See [documentation](https://phpspreadsheet.readthedocs.io/en/latest/topics/reading-and-writing-to-file/#readerwriter-flags) for details
+  - See [documentation](https://phpspreadsheet.readthedocs.io/en/latest/topics/reading-and-writing-to-file/#readerwriter-flags) for details
 - More flexibility in the StringValueBinder to determine what datatypes should be treated as strings [PR #2138](https://github.com/PHPOffice/PhpSpreadsheet/pull/2138)
 - Helper class for conversion between css size Units of measure (`px`, `pt`, `pc`, `in`, `cm`, `mm`) [PR #2152](https://github.com/PHPOffice/PhpSpreadsheet/issues/2145)
 - Allow Row height and Column Width to be set using different units of measure (`px`, `pt`, `pc`, `in`, `cm`, `mm`), rather than only in points or MS Excel column width units [PR #2152](https://github.com/PHPOffice/PhpSpreadsheet/issues/2145)
@@ -807,7 +809,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Fixed issue where array key check for existince before accessing arrays in Xlsx.php [PR #1970](https://github.com/PHPOffice/PhpSpreadsheet/pull/1970)
 - Fixed issue with quoted strings in number format mask rendered with toFormattedString() [Issue 1972#](https://github.com/PHPOffice/PhpSpreadsheet/issues/1972) [PR #1978](https://github.com/PHPOffice/PhpSpreadsheet/pull/1978)
 - Fixed issue with percentage formats in number format mask rendered with toFormattedString() [Issue 1929#](https://github.com/PHPOffice/PhpSpreadsheet/issues/1929) [PR #1928](https://github.com/PHPOffice/PhpSpreadsheet/pull/1928)
-- Fixed issue with _ spacing character in number format mask corrupting output from toFormattedString() [Issue 1924#](https://github.com/PHPOffice/PhpSpreadsheet/issues/1924) [PR #1927](https://github.com/PHPOffice/PhpSpreadsheet/pull/1927)
+- Fixed issue with \_ spacing character in number format mask corrupting output from toFormattedString() [Issue 1924#](https://github.com/PHPOffice/PhpSpreadsheet/issues/1924) [PR #1927](https://github.com/PHPOffice/PhpSpreadsheet/pull/1927)
 - Fix for [Issue #1887](https://github.com/PHPOffice/PhpSpreadsheet/issues/1887) - Lose Track of Selected Cells After Save
 - Fixed issue with Xlsx@listWorksheetInfo not returning any data
 - Fixed invalid arguments triggering mb_substr() error in LEFT(), MID() and RIGHT() text functions [Issue #640](https://github.com/PHPOffice/PhpSpreadsheet/issues/640)
@@ -835,6 +837,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
   `RADIANS()` (deg2rad), `SIN()`, `SINH()`, `SQRT()`, `TAN()`, `TANH()`.
 
   One TextData function is also affected: `REPT()` (str_repeat).
+
 - `formatAsDate` correctly matches language metadata, reverting c55272e
 - Formulae that previously crashed on sub function call returning excel error value now return said value.
   The following functions are affected `CUMPRINC()`, `CUMIPMT()`, `AMORLINC()`,
@@ -859,8 +862,8 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Avoid Duplicate Titles When Reading Multiple HTML Files.[Issue #1823](https://github.com/PHPOffice/PhpSpreadsheet/issues/1823) [PR #1829](https://github.com/PHPOffice/PhpSpreadsheet/pull/1829)
 - Fixed issue with Worksheet's `getCell()` method when trying to get a cell by defined name. [#1858](https://github.com/PHPOffice/PhpSpreadsheet/issues/1858)
 - Fix possible endless loop in NumberFormat Masks [#1792](https://github.com/PHPOffice/PhpSpreadsheet/issues/1792)
-- Fix problem resulting from  literal dot inside quotes in number format masks [PR #1830](https://github.com/PHPOffice/PhpSpreadsheet/pull/1830)
-- Resolve Google Sheets Xlsx charts issue. Google Sheets uses oneCellAnchor positioning and does not include *Cache values in the exported Xlsx [PR #1761](https://github.com/PHPOffice/PhpSpreadsheet/pull/1761)
+- Fix problem resulting from literal dot inside quotes in number format masks [PR #1830](https://github.com/PHPOffice/PhpSpreadsheet/pull/1830)
+- Resolve Google Sheets Xlsx charts issue. Google Sheets uses oneCellAnchor positioning and does not include \*Cache values in the exported Xlsx [PR #1761](https://github.com/PHPOffice/PhpSpreadsheet/pull/1761)
 - Fix for Xlsx Chart axis titles mapping to correct X or Y axis label when only one is present [PR #1760](https://github.com/PHPOffice/PhpSpreadsheet/pull/1760)
 - Fix For Null Exception on ODS Read of Page Settings. [#1772](https://github.com/PHPOffice/PhpSpreadsheet/issues/1772)
 - Fix Xlsx reader overriding manually set number format with builtin number format [PR #1805](https://github.com/PHPOffice/PhpSpreadsheet/pull/1805)
@@ -990,7 +993,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Fix for Issue [#1516](https://github.com/PHPOffice/PhpSpreadsheet/issues/1516) (Cloning worksheet makes corrupted Xlsx) [#1530](https://github.com/PHPOffice/PhpSpreadsheet/pull/1530)
 - Fix For Issue [#1509](https://github.com/PHPOffice/PhpSpreadsheet/issues/1509) (Can not set empty enclosure for CSV) [#1518](https://github.com/PHPOffice/PhpSpreadsheet/pull/1518)
 - Fix for Issue [#1505](https://github.com/PHPOffice/PhpSpreadsheet/issues/1505) (TypeError : Argument 4 passed to PhpOffice\PhpSpreadsheet\Writer\Xlsx\Worksheet::writeAttributeIf() must be of the type string) [#1525](https://github.com/PHPOffice/PhpSpreadsheet/pull/1525)
-- Fix for Issue [#1495](https://github.com/PHPOffice/PhpSpreadsheet/issues/1495) (Sheet index being changed when multiple sheets are used in formula) [#1500]((https://github.com/PHPOffice/PhpSpreadsheet/pull/1500))
+- Fix for Issue [#1495](https://github.com/PHPOffice/PhpSpreadsheet/issues/1495) (Sheet index being changed when multiple sheets are used in formula) [#1500](<(https://github.com/PHPOffice/PhpSpreadsheet/pull/1500)>)
 - Fix for Issue [#1533](https://github.com/PHPOffice/PhpSpreadsheet/issues/1533) (A reference to a cell containing a string starting with "#" leads to errors in the generated xlsx.) [#1534](https://github.com/PHPOffice/PhpSpreadsheet/pull/1534)
 - Xls Writer - Correct Timestamp Bug [#1493](https://github.com/PHPOffice/PhpSpreadsheet/pull/1493)
 - Don't ouput row and columns without any cells in HTML writer [#1235](https://github.com/PHPOffice/PhpSpreadsheet/issues/1235)
@@ -1150,6 +1153,7 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Provide a check to identify whether libxml_disable_entity_loader is thread-safe or not.
 
   `XmlScanner::threadSafeLibxmlDisableEntityLoaderAvailability()`
+
 - Provide an option to disable the libxml_disable_entity_loader call through settings. This is not recommended as it reduces the security of the XML-based readers, and should only be used if you understand the consequences and have no other choice.
 
 ### Added
@@ -1263,49 +1267,49 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Support workbook view attributes for Xlsx format [#523](https://github.com/PHPOffice/PhpSpreadsheet/issues/523)
 - Read and write hyperlink for drawing image [#490](https://github.com/PHPOffice/PhpSpreadsheet/pull/490)
 - Added calculation engine support for the new bitwise functions that were added in MS Excel 2013
-  - BITAND()          Returns a Bitwise 'And' of two numbers
-  - BITOR()           Returns a Bitwise 'Or' of two number
-  - BITXOR()          Returns a Bitwise 'Exclusive Or' of two numbers
-  - BITLSHIFT()       Returns a number shifted left by a specified number of bits
-  - BITRSHIFT()       Returns a number shifted right by a specified number of bits
+  - BITAND() Returns a Bitwise 'And' of two numbers
+  - BITOR() Returns a Bitwise 'Or' of two number
+  - BITXOR() Returns a Bitwise 'Exclusive Or' of two numbers
+  - BITLSHIFT() Returns a number shifted left by a specified number of bits
+  - BITRSHIFT() Returns a number shifted right by a specified number of bits
 - Added calculation engine support for other new functions that were added in MS Excel 2013 and MS Excel 2016
   - Text Functions
-    - CONCAT()        Synonym for CONCATENATE()
-    - NUMBERVALUE()   Converts text to a number, in a locale-independent way
-    - UNICHAR()       Synonym for CHAR() in PHPSpreadsheet, which has always used UTF-8 internally
-    - UNIORD()        Synonym for ORD() in PHPSpreadsheet, which has always used UTF-8 internally
-    - TEXTJOIN()      Joins together two or more text strings, separated by a delimiter
+    - CONCAT() Synonym for CONCATENATE()
+    - NUMBERVALUE() Converts text to a number, in a locale-independent way
+    - UNICHAR() Synonym for CHAR() in PHPSpreadsheet, which has always used UTF-8 internally
+    - UNIORD() Synonym for ORD() in PHPSpreadsheet, which has always used UTF-8 internally
+    - TEXTJOIN() Joins together two or more text strings, separated by a delimiter
   - Logical Functions
-    - XOR()           Returns a logical Exclusive Or of all arguments
+    - XOR() Returns a logical Exclusive Or of all arguments
   - Date/Time Functions
-    - ISOWEEKNUM()    Returns the ISO 8601 week number of the year for a given date
+    - ISOWEEKNUM() Returns the ISO 8601 week number of the year for a given date
   - Lookup and Reference Functions
-    - FORMULATEXT()   Returns a formula as a string
+    - FORMULATEXT() Returns a formula as a string
   - Financial Functions
-    - PDURATION()     Calculates the number of periods required for an investment to reach a specified value
-    - RRI()           Calculates the interest rate required for an investment to grow to a specified future value
+    - PDURATION() Calculates the number of periods required for an investment to reach a specified value
+    - RRI() Calculates the interest rate required for an investment to grow to a specified future value
   - Engineering Functions
-    - ERF.PRECISE()   Returns the error function integrated between 0 and a supplied limit
-    - ERFC.PRECISE()  Synonym for ERFC
+    - ERF.PRECISE() Returns the error function integrated between 0 and a supplied limit
+    - ERFC.PRECISE() Synonym for ERFC
   - Math and Trig Functions
-    - SEC()           Returns the secant of an angle
-    - SECH()          Returns the hyperbolic secant of an angle
-    - CSC()           Returns the cosecant of an angle
-    - CSCH()          Returns the hyperbolic cosecant of an angle
-    - COT()           Returns the cotangent of an angle
-    - COTH()          Returns the hyperbolic cotangent of an angle
-    - ACOT()          Returns the cotangent of an angle
-    - ACOTH()         Returns the hyperbolic cotangent of an angle
+    - SEC() Returns the secant of an angle
+    - SECH() Returns the hyperbolic secant of an angle
+    - CSC() Returns the cosecant of an angle
+    - CSCH() Returns the hyperbolic cosecant of an angle
+    - COT() Returns the cotangent of an angle
+    - COTH() Returns the hyperbolic cotangent of an angle
+    - ACOT() Returns the cotangent of an angle
+    - ACOTH() Returns the hyperbolic cotangent of an angle
 - Refactored Complex Engineering Functions to use external complex number library
 - Added calculation engine support for the new complex number functions that were added in MS Excel 2013
-    - IMCOSH()        Returns the hyperbolic cosine of a complex number
-    - IMCOT()         Returns the cotangent of a complex number
-    - IMCSC()         Returns the cosecant of a complex number
-    - IMCSCH()        Returns the hyperbolic cosecant of a complex number
-    - IMSEC()         Returns the secant of a complex number
-    - IMSECH()        Returns the hyperbolic secant of a complex number
-    - IMSINH()        Returns the hyperbolic sine of a complex number
-    - IMTAN()         Returns the tangent of a complex number
+  - IMCOSH() Returns the hyperbolic cosine of a complex number
+  - IMCOT() Returns the cotangent of a complex number
+  - IMCSC() Returns the cosecant of a complex number
+  - IMCSCH() Returns the hyperbolic cosecant of a complex number
+  - IMSEC() Returns the secant of a complex number
+  - IMSECH() Returns the hyperbolic secant of a complex number
+  - IMSINH() Returns the hyperbolic sine of a complex number
+  - IMTAN() Returns the tangent of a complex number
 
 ### Fixed
 
@@ -1435,13 +1439,13 @@ Note that this will be the last 1.x branch release before the 2.x release. We wi
 - Easier usage of PDF writers, and other custom readers and writers, see the [migration guide](./docs/topics/migration-from-PHPExcel.md).
 - Easier usage of chart renderers, see the [migration guide](./docs/topics/migration-from-PHPExcel.md).
 - Rename a few more classes to keep them in their related namespaces:
-    - `CalcEngine` => `Calculation\Engine`
-    - `PhpSpreadsheet\Calculation` => `PhpSpreadsheet\Calculation\Calculation`
-    - `PhpSpreadsheet\Cell` => `PhpSpreadsheet\Cell\Cell`
-    - `PhpSpreadsheet\Chart` => `PhpSpreadsheet\Chart\Chart`
-    - `PhpSpreadsheet\RichText` => `PhpSpreadsheet\RichText\RichText`
-    - `PhpSpreadsheet\Style` => `PhpSpreadsheet\Style\Style`
-    - `PhpSpreadsheet\Worksheet` => `PhpSpreadsheet\Worksheet\Worksheet`
+  - `CalcEngine` => `Calculation\Engine`
+  - `PhpSpreadsheet\Calculation` => `PhpSpreadsheet\Calculation\Calculation`
+  - `PhpSpreadsheet\Cell` => `PhpSpreadsheet\Cell\Cell`
+  - `PhpSpreadsheet\Chart` => `PhpSpreadsheet\Chart\Chart`
+  - `PhpSpreadsheet\RichText` => `PhpSpreadsheet\RichText\RichText`
+  - `PhpSpreadsheet\Style` => `PhpSpreadsheet\Style\Style`
+  - `PhpSpreadsheet\Worksheet` => `PhpSpreadsheet\Worksheet\Worksheet`
 
 ## 1.0.0-beta - 2017-08-17
 
@@ -1488,4 +1492,5 @@ For a comprehensive list of all class changes, and a semi-automated migration pa
 The changelog for the project when it was called PHPExcel is [still available](./CHANGELOG.PHPExcel.md).
 
 ### Changed
+
 - Replace ezyang/htmlpurifier (LGPL2.1) with voku/anti-xss (MIT)
