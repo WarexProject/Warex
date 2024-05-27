@@ -50,7 +50,7 @@ function close() {
 
 .modal {
   background: var(--color-gray-ultralight);
-  padding: 20px;
+  padding: 80px 50px;
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
@@ -64,10 +64,10 @@ function close() {
 .close-button {
   text-decoration: none;
   font-weight: bold;
-  font-size: 20px;
-  background-color: var(--color-red);
-  color: white;
+  font-size: 30px;
+  color: var(--color-red);
   position: absolute;
+  background-color: var(--color-gray-ultralight);
   top: 10px;
   right: 10px;
   border: none;
@@ -78,7 +78,6 @@ function close() {
 }
 
 .close-button:hover {
-  background-color: var(--color-red);
 }
 
 .modal-content {

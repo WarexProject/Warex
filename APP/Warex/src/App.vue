@@ -3,7 +3,6 @@ import { RouterView, useRoute } from 'vue-router'
 import FooterComp from '@/components/FooterComp.vue'
 import HeaderComp from '@/components/HeaderComp.vue'
 
-
 const route = useRoute()
 
 </script>

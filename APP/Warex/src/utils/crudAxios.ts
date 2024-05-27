@@ -3,7 +3,7 @@ export const BASEURL: string = "http://localhost:3000";
 
 export const saveData = async (url: string, table: string, data: any)  => {
     try {
-        await axios.post(`${url}/${table}`, data);
+        await axios.post(`${url}/${table}?accion=consulta`, data);
     } catch (e) {
         console.log(e);
     }
