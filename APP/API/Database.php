@@ -17,6 +17,7 @@ class Database
 			echo 'Error de conexión a la base de datos';
 			exit;
 		}
+		$this->connection->set_charset("utf8mb4");
 	}
 
 	public function getDB($table, $extra = null){

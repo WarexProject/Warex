@@ -17,7 +17,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			'result' => 'ok',
 			'data' => $data
 		);
-
 		Response::result(200, $response); 
 
 		break;

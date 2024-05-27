@@ -7,6 +7,8 @@ interface User {
   id: string;
   username: string;
   email: string;
+  idCompany: string;
+  permissions: string;
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -66,11 +68,15 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
+  const pruebaUser = () => {
+    
+  }
+
   return {
     user,
     isAuthenticated,
     login,
     logout,
-    initialize,
+    initialize
   };
 });
