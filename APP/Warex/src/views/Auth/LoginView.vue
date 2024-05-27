@@ -8,7 +8,7 @@
             </div>
             <div class="inputsCont">
                 <div class="inputLogin">
-                    <input type="text" placeholder="email" v-model="email">
+                    <input type="text" placeholder="usuario" v-model="username">
                 </div>
                 <div class="inputLogin">
                     <input :type="showPassword ? 'text' : 'password'" placeholder="contraseña" v-model="password">
@@ -33,13 +33,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useUserStore } from '@/stores/userStore';
 import { RouterLink, useRouter } from 'vue-router'
 import OverlayComp from '@/components/OverlayComp.vue'
 
 //
-
+const userStore = useUserStore();
 const router = useRouter();
-const email = ref('')
+const username = ref('')
 const password = ref('')
 
 const showPassword = ref(false)
@@ -49,8 +50,27 @@ const errorMsj = ref('')
 //
 
 const logIn = () => {
-    router.push('/')
+    const user = {
+        username: username.value,
+        password: password.value
+    }
+    if(notEmpty()){userStore.login(user)}
+    
 }
+
+
+const notEmpty = () => {
+    if(username.value.trim().length > 0 && password.value.trim().length > 0){
+        isError.value = false
+        return true
+    }
+    else{
+        errorMsj.value = 'Error. Debes rellenar todos los campos'
+        isError.value = true
+        return false
+    }
+}
+
 </script>
 
 <style scoped>
@@ -118,6 +138,8 @@ p{
     flex-direction: column; 
     gap: 0.75rem;
     color: #1E1E1E;
+    align-items: center; 
+    width: 45%;
 }
 
 .inputLogin{
