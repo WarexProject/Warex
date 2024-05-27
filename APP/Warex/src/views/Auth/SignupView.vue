@@ -7,18 +7,18 @@
             </div>
             <div class="inputsCont">
                 <div class="inputSignUp">
-                    <input type="text" placeholder="username" v-model="username">
+                    <input type="text" placeholder="usuario" v-model="username">
                 </div>
                 <div class="inputSignUp">
                     <input type="email" placeholder="email" v-model="email">
                 </div>
                 <div class="inputSignUp">
-                    <input :type="showPassword ? 'text' : 'password'" placeholder="password" v-model="password">
+                    <input :type="showPassword ? 'text' : 'password'" placeholder="contraseña" v-model="password">
                     <font-awesome-icon class="eye" :icon="showPassword ? 'eye-slash' : 'eye'"
                         @click="showPassword = !showPassword" />
                 </div>
                 <div class="inputSignUp">
-                    <input :type="showPassword ? 'text' : 'password'" placeholder="confirm password"
+                    <input :type="showPassword ? 'text' : 'password'" placeholder="confirmar contraseña"
                         v-model="confPassword">
                 </div>
             </div>
@@ -120,9 +120,11 @@ const signUp = () => {
 
 .inputsCont{
     display: flex; 
-    flex-direction: column; 
+    flex-direction: column;
+    align-items: center; 
     gap: 0.75rem;
     color: #1E1E1E;
+    width: 45%;
 }
 
 .inputSignUp{
@@ -135,7 +137,7 @@ const signUp = () => {
     gap: 0.5rem; 
     align-items: center; 
     border-radius: 1.5rem; 
-    width: 100%; 
+    width: 100%;
     background-color: #ffffff; 
 }
 

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
 import AuthHomeView from '@/views/Auth/AuthHomeView.vue'
 import LoginView from '@/views/Auth/LoginView.vue'
 import SignupView from '@/views/Auth/SignupView.vue'
@@ -79,5 +80,27 @@ const router = createRouter({
     },
   ]
 })
+
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+
+  if (userStore.isAuthenticated) {
+    if (to.matched.some((record) => record.meta.authRequired)) {
+      next();
+    } else {
+      next('/');
+    }
+  } else {
+    if (to.matched.some((record) => record.meta.authRequired)) {
+      next('/auth');
+    } else {
+      next();
+    }
+  }
+});
+
+
+/*ENCONTRAR FORMA DE ALMACENAR EN EL LOCAL STORAGE UNA VARIABLE CON LA ULTIMA RUTA VISITADA, DE TAL FORMA QUE ME INTENTE LLEVAR AHI CADA VEZ QUE SE HAGA REFRESH*/
 
 export default router

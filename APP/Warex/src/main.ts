@@ -10,8 +10,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { faEye, faArrowLeft, faEyeSlash, faDatabase, faHome, faCloudUploadAlt, faChartBar, faUser } from '@fortawesome/free-solid-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-library.add(faGithub, faEye, faEyeSlash, faArrowLeft, faHome, faDatabase, faCloudUploadAlt, faChartBar, faUser )
+import { faDiscord, faFacebook, faGithub, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
+library.add(faGithub, faFacebook, faTwitter, faInstagram, faDiscord, faEye, faEyeSlash, faArrowLeft, faHome, faDatabase, faCloudUploadAlt, faChartBar, faUser )
 
 const app = createApp(App)
 
