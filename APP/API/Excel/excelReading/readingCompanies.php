@@ -14,7 +14,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
  * @return array Un array asociativo que contiene los datos de NIF y Nombre de la Empresa.
  * @throws Exception Si alguno de los campos de NIF o Nombre de la Empresa está vacío en alguna fila.
  */
-function almacenarDatosExcel($documenntoExcel) {
+function almacenarDatosCompaniesExcel($documenntoExcel) {
     $documento = IOFactory::load($documenntoExcel);
     $hojaActual = $documento->getSheet(0);
     $numeroFilas = $hojaActual->getHighestDataRow();
@@ -22,16 +22,11 @@ function almacenarDatosExcel($documenntoExcel) {
     for ($indiceFila = 2; $indiceFila <= $numeroFilas; $indiceFila++) { // 2 para no incluir la cabecera
         $nif = $hojaActual->getCell(Coordinate::stringFromColumnIndex(1) . $indiceFila)->getValue();
         $companyName = $hojaActual->getCell(Coordinate::stringFromColumnIndex(2) . $indiceFila)->getValue();
-        // Verificar si los campos no están vacíos
-        if (!empty($nif) && !empty($companyName)) {
-            // Agregar datos al array
-            $data[] = [
-                'nif' => $nif,
-                'companyName' => $companyName
-            ];
-        } else {
-            throw new Exception("Los datos viene vacios o incorrectos");
-        }
+        // Agregar datos al array
+        $data[] = [
+            'nif' => $nif,
+            'companyName' => $companyName
+        ];
     }
     return $data;
 }

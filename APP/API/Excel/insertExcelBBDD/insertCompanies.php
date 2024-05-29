@@ -21,10 +21,6 @@ function insertarDatosCOMPANIES ($ArDatos) {
     foreach ($ArDatos as $row) {
         $nif = $row['nif'];
         $companyName = $row['companyName'];
-        // Verificar si $nif y $companyName no están vacíos
-        if (empty($nif) || empty($companyName)) {
-            throw new Exception("Los datos vienen vacíos o incorrectos.");
-        }
         // Verificar validez de NIF y nombre de la empresa
         if (!verificarNIF($nif) || !verificarCompanyName($companyName)) {
             throw new Exception("Los datos vienen incorrectos.");
