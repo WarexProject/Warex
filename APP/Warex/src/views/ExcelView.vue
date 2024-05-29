@@ -117,8 +117,10 @@
     <!-- Segunda celda -->
     <div class="second-cell">
       <div class="file-input-section" v-if="selectedOption !== 'LOCATION'">
-        <label for="file-upload">Selecciona tu archivo EXCEL de {{ selectedOption }}</label>
-        <input id="file-upload" type="file" />
+        <form @submit.prevent="uploadFile">
+          <label for="">Selecciona tu archivo EXCEL de {{ selectedOption }}</label>
+          <input type="file" @change="handleFileUpload">
+        </form>
       </div>
       <div class="file-input-section" v-if="selectedOption === 'LOCATION'">
         <input
@@ -129,7 +131,8 @@
         />
       </div>
       <div class="button-section">
-        <button>Subir EXCEL de {{ selectedOption }}</button>
+        <button type="submit" v-if="selectedOption !== 'LOCATION'" @click="uploadFile">Subir EXCEL de {{ selectedOption }}</button>
+        <button v-if="selectedOption === 'LOCATION'">Guardar producto en la estantería</button>
       </div>
     </div>
 
@@ -145,7 +148,7 @@
         </select>
       </div>
       <div class="right-button-section">
-        <button>Descargar plantilla de EXCEL de {{ selectedOption }}</button>
+        <button v-if="selectedOption !== 'LOCATION'" @click="downloadTemplate(selectedOption)">Descargar plantilla de EXCEL de {{ selectedOption }}</button>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'SECTION'">
         <select>
@@ -203,36 +206,84 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import axios from 'axios';
 
 const selectedOption = ref('WAREHOUSES')
 
 const handleChange = () => {
   console.log(selectedOption.value)
 }
+
+const selectedFile = ref<File | null>(null);
+
+function handleFileUpload(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    selectedFile.value = target.files[0];
+  }
+}
+
+async function uploadFile() {
+  if (!selectedFile.value) {
+    alert('Please select a file first!');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('archivo', selectedFile.value);
+
+  try {
+    const response = await axios.post('http://localhost/Excel/IndexExcel.php', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (response.data.message === undefined) {
+       alert('File uploaded successfully');
+    } else {
+      alert(response.data.message);
+    }
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    alert('Error uploading file. Check console for details.');
+  }
+}
+
+const downloadTemplate = (queFichero: String) => {
+  let filePath = ''
+  switch(queFichero) {
+    case "WAREHOUSES":
+      filePath = 'src/utils/plantillasEXCEL/warehouses.xlsx';
+      break;
+    case "PRODUCTS":
+      filePath = 'src/utils/plantillasEXCEL/products.xlsx';
+      break;
+    case "SECTION":
+      filePath = 'src/utils/plantillasEXCEL/section.xlsx';
+      break;
+    case "SHELF":
+      filePath = 'src/utils/plantillasEXCEL/shelf.xlsx';
+      break;
+    default:
+      alert('No hemos encontrado la plantilla seleccionada.');
+  }
+  const a = document.createElement('a');
+  a.href = filePath;
+  a.download = filePath.split('/').pop() || '';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
+
+
 </script>
 
 <style scoped>
-
-:root {
-    --color-blue-electric: #3A61F7;
-    --color-blue-userLink: #5694f0;
-    --color-blue-middle: #64708B;
-    --color-blue-ultralight: #EEF0F8;
-    --color-gray-dark: #212121;
-    --color-gray-medium: #484C5A;
-    --color-gray-middle: #9DA3B5;
-    --color-gray-ultralight: #E6E8EC;
-    --color-red: #DC2843;
-    --color-green: #08cc74;
-    --color-green-light: #60ca9a;
-    --color-orange: rgb(255, 185, 56);
-    --color-orange-dark: #ff7f00;
- }
-
 .image-section img {
   display: none; /* Oculta todas las imágenes por defecto */
 }
@@ -261,7 +312,7 @@ const handleChange = () => {
 
 .image-section {
   flex: 1 1 60%;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   padding: 10px;
   display: flex;
   align-items: center;
@@ -272,11 +323,12 @@ const handleChange = () => {
   object-fit: contain;
   width: 95%;
   height: 100%;
+  border-radius: 15px;
 }
 
 .list-section {
   flex: 1 1 40%;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   padding: 10px;
   padding-left: 30px;
 }
@@ -304,6 +356,7 @@ const handleChange = () => {
   justify-content: center;
   align-items: center;
   gap: 10px; /* Espacio entre el label y el input */
+  width: 100%;
 }
 
 .file-input-section input {
@@ -315,6 +368,7 @@ const handleChange = () => {
 .button-section {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .button-section button {
@@ -357,6 +411,11 @@ const handleChange = () => {
 .right-button-section button {
   margin-top: 0;
   height: 60px;
+}
+
+span {
+color: var(--color-blue-electric);
+font-weight: bold;
 }
 
 button {
