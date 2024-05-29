@@ -21,15 +21,10 @@ function almacenarDatosShelfExcel($documenntoExcel) {
     $data = []; // Array para almacenar los datos
     for ($indiceFila = 2; $indiceFila <= $numeroFilas; $indiceFila++) { // 2 para no incluir la cabecera
         $shelfName = $hojaActual->getCell(Coordinate::stringFromColumnIndex(1) . $indiceFila)->getValue();
-        // Verificar si los campos no están vacíos
-        if (!empty($shelfName)) {
-            // Agregar datos al array
-            $data[] = [
-                'shelfName' => $shelfName
-            ];
-        } else {
-            throw new Exception("Los datos viene vacios o incorrectos");
-        }
+        // Agregar datos al array
+        $data[] = [
+            'shelfName' => $shelfName
+        ];
     }
     return $data;
 }
