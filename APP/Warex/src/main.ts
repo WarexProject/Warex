@@ -9,9 +9,9 @@ import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { faEye, faArrowLeft, faEyeSlash, faDatabase, faHome, faCloudUploadAlt, faChartBar, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faArrowLeft, faEyeSlash, faDatabase, faHome, faCloudUploadAlt, faChartBar, faUser, faBuilding, faWarehouse, faBox } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faFacebook, faGithub, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
-library.add(faGithub, faFacebook, faTwitter, faInstagram, faDiscord, faEye, faEyeSlash, faArrowLeft, faHome, faDatabase, faCloudUploadAlt, faChartBar, faUser )
+library.add(faGithub, faFacebook, faTwitter, faInstagram, faDiscord, faEye, faEyeSlash, faArrowLeft, faHome, faDatabase, faCloudUploadAlt, faChartBar, faUser, faBuilding,  faWarehouse, faBox)
 
 const app = createApp(App)
 
