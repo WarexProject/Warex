@@ -104,7 +104,7 @@ function confirmChange(type: string) {
 
 .action-button:hover {
   background-color: var(--color-orange);
-  color: var(--color-green);
+  color: white;
 }
 
 .user-container {

@@ -47,6 +47,6 @@ onMounted(() => {
   font-size: 0.9rem;
   font-weight: bold;
   color: var(--color-green);
-  border-radius: 80px;
+  border-radius: 180px;
 }
 </style>
