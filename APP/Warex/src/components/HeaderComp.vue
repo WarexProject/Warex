@@ -90,7 +90,7 @@ border-radius: 4px;
 padding: 10px;
 left: 50px;
 width: 200px;
-margin-top: -20px;
+margin-top: -15px;
 border-radius: 10px;
 font-size: 15px;
 border: 2px solid #ffffff;
@@ -122,12 +122,12 @@ width: 100%;
 
 .userMenuItem:hover {
 background-color: var(--color-orange);
-color: var(--color-green);
+color: white;
 }
 
 .userMenuBtn:hover {
 background-color: var(--color-orange);
-color: var(--color-green);
+color: white;
 }
 
 .userLink:hover + .userMenu,
@@ -161,14 +161,14 @@ transition: background-color 0.3s ease;
 display: flex;
 justify-content: center;
 align-items: center;
-width: 40px;
-height: 35px;
-border-radius: 25px;
+width: 45px;
+height: 45px;
+border-radius: 50%;
 border: 2px solid #ffffff;
 color: #ffffff;
 text-decoration: none;
 margin-top:-60px;
-margin-left: 10px;
+margin-left: 20px;
 }
 
 .userIcon {
@@ -211,7 +211,7 @@ font-size: 15px;
 
 .navLink:hover {
  background-color: var(--color-orange);
- color: var(--color-green); 
+ color: white;
 }
 
 .icono-db{

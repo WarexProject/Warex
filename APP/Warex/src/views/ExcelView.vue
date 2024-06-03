@@ -22,30 +22,29 @@
         <div class="list-section" v-if="selectedOption === 'LOCATION'">
           <ol>
             <li>
-              <span>Selecciona un WAREHOUSES:</span> Este desplegable tienes que seleccionar el
+              <span>Selecciona un WAREHOUSES:</span> En este desplegable tienes que seleccionar el
               almacén donde deseas guardar el producto.
             </li>
             <li>
-              <span>Selecciona un SECTION:</span> Este desplegable tienes que seleccionar a que
-              sección del almacen deseas guardar el producto.
+              <span>Selecciona un SECTION:</span> En este desplegable tienes que seleccionar en qué
+              sección del almacén deseas guardar el producto.
             </li>
             <li>
-              <span>Selecciona un SHELF:</span> Este desplegable tienes que seleccionar a que
-              estanteria de la sección indicada del almacen deseas guardar el producto.
+              <span>Selecciona un SHELF:</span> En este desplegable tienes que seleccionar a qué
+              estanteria de la sección indicada del almacén deseas guardar el producto.
             </li>
             <li>
-              <span>Selecciona un PRODUCTS:</span> Este desplegable tienes que seleccionar el
-              producto que deseas almacenar en el lamcén indicado.
+              <span>Selecciona un PRODUCTS:</span> En este desplegable tienes que seleccionar el
+              producto que deseas almacenar en el alamcén indicado.
             </li>
             <li>
-              <span>CANTIDAD DEL PRODUCTO:</span> Escribe la cantidad de productos que deseas
+              <span>CANTIDAD DEL PRODUCTO:</span> Inndica la cantidad de productos que deseas
               almacenar en el lamcén indicado.
             </li>
             <li>
-              <span>EXPLICACIÓN:</span> En esta opción de pestaña podras indicar a que almacén, que
-              sección en concreto de ese almacén en que estantería de la sección indicada quieres
-              guardar el producto seleccionado y que cantidad de ese producto quieres almacenar en
-              esa estantería.
+              <span>EXPLICACIÓN:</span> En esta opción de pestaña podrás indicar a qué almacén, qué
+              sección en concreto de ese almacén y en qué estantería de la sección indicada quieres
+              guardar el producto seleccionado, así como la cantidad de ese producto que quieres almacenar.
             </li>
           </ol>
         </div>
@@ -81,16 +80,16 @@
             de productos que hay.
           </li>
           <li>
-            <span>DESCRIPTION:</span> Este campo es OPCIONAL si deseas completarlo se debe
-            completarse indicando una breve descripción del producto.
+            <span>DESCRIPTION:</span> Este campo es OPCIONAL. Si deseas completarlo, debes
+            hacerlo indicando una breve descripción del producto.
           </li>
           <li>
             <span>UNIT PRICE:</span> Este campo debe completarse con la el valor unitario del
             producto.
           </li>
           <li>
-            <span>EXPIRY DATE:</span> Este campo es OPCIONAL si deseas completarlo se debe
-            completarse indicando la fecha de caducidad del producto en formato año/mes/día.
+            <span>EXPIRY DATE:</span> Este campo es OPCIONAL. Si deseas completarlo, debes hacerlo
+             indicando la fecha de caducidad del producto en formato año/mes/día.
           </li>
         </ol>
       </div>
