@@ -31,8 +31,6 @@ function confirmChange(type: string) {
   }
   closeModal();
 }
-
-
 </script>
 
 

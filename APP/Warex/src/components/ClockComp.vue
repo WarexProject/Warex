@@ -2,7 +2,7 @@
   <div class="clock">
     <img src="@/assets/img/clock-icon.png" alt="" width="25px">
     <hr>
-    <h3>{{ currentTime }}</h3>
+    <h3 class="time">{{ currentTime }}</h3>
   </div>
 </template>
 
@@ -44,9 +44,12 @@ onMounted(() => {
   --color-orange-dark: #ff7f00;
 }
 .clock {
-  font-size: 0.9rem;
+  font-size: 1.9rem;
   font-weight: bold;
   color: var(--color-green);
-  border-radius: 180px;
+  border-radius: 20px;
+}
+.time {
+  margin-top: -4px;
 }
 </style>

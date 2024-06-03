@@ -20,19 +20,19 @@ const date = new Date()
         <h2 id="info-titulo" style="text-align: center;">Información general</h2>
         <div class="info-item">
           <font-awesome-icon icon="building" class="buildingIcon" style="color: var(--color-green-light); font-size: 30px; margin-left: 5px"/>
-          <h2 style="margin-left: -550px;"><strong>Tu empresa</strong></h2>
+          <h2><strong>Tu empresa</strong></h2>
           <h3 style="color: green">Empresa 1</h3>
         </div>
         <hr>
         <div class="info-item">
           <font-awesome-icon icon="warehouse" class="warehouseIcon" style="color: var(--color-green-light); font-size: 30px;"/>
-          <h2 style="margin-left: -410px;"><strong>Almacenes registrados</strong></h2>
+          <h2><strong>Almacenes registrados</strong></h2>
           <h3 style="color: green">5 almacenes</h3>
         </div>
         <hr>
         <div class="info-item">
           <font-awesome-icon icon="box" class="boxIcon" style="color: var(--color-green-light); font-size: 30px;"/>
-          <h2 style="margin-left: -350px;"><strong>Productos almacenados</strong></h2>
+          <h2><strong>Productos almacenados</strong></h2>
           <h3 style="color: green">1.200 productos</h3>
         </div>
       </div>
@@ -55,6 +55,7 @@ const date = new Date()
 }
 
 .info-panel {
+  position: relative; /* Asegura que los elementos absolutos se posicionen relativos a este */
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -64,30 +65,37 @@ const date = new Date()
 }
 
 .info-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 20px; /* Ajusta según sea necesario */
+  margin-right: 20px; /* Ajusta según sea necesario */
   width: 45px;
-  transform: translateX(820px)
 }
 
 .show-info-panel {
-  width: 100%;
-  height: 100%;
-  justify-content: space-around;
-  margin-top: 5px;
+  display: flex; /* Utilizamos flexbox para distribuir los elementos */
+  flex-direction: column; /* Columna para apilar los elementos verticalmente */
+  justify-content: space-between; /* Espaciado entre los elementos */
+  height: 90%; /* Para que ocupe toda la altura del contenedor */
 }
 
 .info-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 10px 0;
 }
 
-
-.info-item h3 {
+.info-item h2 {
   margin: 0;
-  transform: translateY(25px);
+  margin-left: 10px; /* Espacio entre el icono y el h2 */
+  flex: 1; /* El h2 ocupará todo el espacio restante */
 }
 
+.info-item h3 {
+  margin-top: 30px;
+}
 
 .components-panel {
   display: flex;
@@ -102,11 +110,11 @@ const date = new Date()
 .clock {
   background-color: white;
   padding: 20px;
-  border-radius: 80%;
-  width: 100px;
+  width: 80%;
   height: 100px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  border-radius: 20%;
 }
 
 .calendar {
