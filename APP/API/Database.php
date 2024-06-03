@@ -1,9 +1,8 @@
 <?php
+
 class Database
 {
 	private $connection; 
-	private $results_page = 5; 
-
 	
 	private $servername = "localhost";
 	private $username = "warex";
@@ -20,10 +19,12 @@ class Database
 		$this->connection->set_charset("utf8mb4");
 	}
 
-	public function getDB($table, $extra = null){
-		$query = "SELECT * FROM $table"; 
-
-
+	public function getDB($table, $extra = null, $sql = null){
+		if(isset($sql) && !empty($sql)){
+			$query = $sql;
+		}
+		else{
+			$query = "SELECT * FROM $table"; 
 		if($extra != null){
 
 			$query .= ' WHERE';
@@ -35,7 +36,7 @@ class Database
 				}
 			}
 		}
-
+		}
 		$results = $this->connection->query($query); 
 		$resultArray = array(); 
 
@@ -45,6 +46,7 @@ class Database
 
 		return $resultArray; 
 	}
+
 
 	public function insertDB($table, $data){
 		$fields = implode(',', array_keys($data)); 

@@ -1,7 +1,6 @@
 <?php
 // Importación de las librerias necesarias
 include_once "vendor/autoload.php";
-
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
@@ -15,8 +14,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
  * @return array Un array asociativo que contiene los datos del almacen.
  * @throws Exception Si alguno de los campos está vacío en alguna fila.
  */
-function almacenarDatosWarehousesExcel($documenntoExcel)
-{
+function almacenarDatosWarehousesExcel($documenntoExcel) {
     $documento = IOFactory::load($documenntoExcel);
     $hojaActual = $documento->getSheet(0);
     $numeroFilas = $hojaActual->getHighestDataRow();
@@ -26,11 +24,17 @@ function almacenarDatosWarehousesExcel($documenntoExcel)
         $totalProductQuantity = $hojaActual->getCell(Coordinate::stringFromColumnIndex(2) . $indiceFila)->getValue();
         $refrigeratingChamber = $hojaActual->getCell(Coordinate::stringFromColumnIndex(3) . $indiceFila)->getValue();
         // Verificar si los campos no están vacíos
-        $data[] = [
-            'companyID' => $companyID,
-            'totalProductQuantity' => $totalProductQuantity,
-            'refrigeratingChamber' => $refrigeratingChamber
-        ];
+        if (!empty($companyID) && !empty($totalProductQuantity) && !empty($refrigeratingChamber)) {
+            // Agregar datos al array
+            $data[] = [
+                'companyID' => $companyID,
+                'totalProductQuantity' => $totalProductQuantity,
+                'refrigeratingChamber' => $refrigeratingChamber
+            ];
+        } else {
+            throw new Exception("Los datos viene vacios o incorrectos");
+        }
     }
     return $data;
 }
+?>

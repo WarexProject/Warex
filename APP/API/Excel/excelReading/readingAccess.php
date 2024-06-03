@@ -26,16 +26,20 @@ function almacenarDatosAccessExcel($documenntoExcel) {
         $companyID = $hojaActual->getCell(Coordinate::stringFromColumnIndex(4) . $indiceFila)->getValue();
         $password = $hojaActual->getCell(Coordinate::stringFromColumnIndex(5) . $indiceFila)->getValue();
         $lastName = $hojaActual->getCell(Coordinate::stringFromColumnIndex(6) . $indiceFila)->getValue();
-        
+        // Verificar si los campos no están vacíos
+        if (!empty($DNI) && !empty($name) && !empty($userName) && !empty($companyID) && !empty($password)) {
             // Agregar datos al array
-        $data[] = [
-            'DNI' => $DNI,
-            'name' => $name,
-            'userName' => $userName,
-            'companyID' => $companyID,
-            'password' => $password,
-            'lastName' => $lastName
-        ];
+            $data[] = [
+                'DNI' => $DNI,
+                'name' => $name,
+                'userName' => $userName,
+                'companyID' => $companyID,
+                'password' => $password,
+                'lastName' => $lastName
+            ];
+        } else {
+            throw new Exception("Los datos viene vacios o incorrectos");
+        }
     }
     return $data;
 }

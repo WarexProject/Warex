@@ -4,19 +4,42 @@ require_once 'Validate.php';
 
 $validate = new validate();
 
+header('Content-Type: application/json; charset=utf-8');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Manejar las solicitudes preflight (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
-		if($table){
-			unset($_GET['table']);
+		$sql = isset($_GET['sql']) ? $_GET['sql'] : null;
+
+		if($sql){
+			$data = $validate->get($table, null, $sql);
+			$response = array(
+				'result' => 'ok',
+				'data' => $data
+			);
 		}
-		$params = $_GET;
-		$data = $validate->get($table, $params);
-		$response = array(
-			'result' => 'ok',
-			'data' => $data
-		);
+		else{
+			if($table){
+				unset($_GET['table']);
+			}
+			$params = $_GET;
+			$data = $validate->get($table, $params);
+			$response = array(
+				'result' => 'ok',
+				'data' => $data
+			);
+		}
+		
 		Response::result(200, $response); 
 
 		break;
@@ -25,25 +48,63 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		
 		$params = json_decode(file_get_contents('php://input'), true);
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
-		if($table){
-			unset($_GET['table']);
-		}
-		if(!isset($params)){
+		$action = isset($_GET['accion']) ? $_GET['accion'] : null;
+		$sql = isset($params['sql']) ? $params['sql'] : null;
+		if($sql){
+			$data = $validate->get($table, null, $sql);
 			$response = array(
-				'result' => 'error',
-				'details' => 'Error en la solicitud'
+				'result' => 'ok',
+				'data' => $data
 			);
-
-			Response::result(400, $response);
-			exit;
+		}
+		else{
+			if($table){
+				unset($_GET['table']);
+			}
+			if(!isset($params)){
+				$response = array(
+					'result' => 'error',
+					'details' => 'Error en la solicitud'
+				);
+	
+				Response::result(400, $response);
+				exit;
+			}
+	
+			if(isset($action) && $action == 'login'){
+				$response = array(
+					'result' => 'ok',
+					'user' => $params
+				);
+				$data = $validate->get('access', $params);
+			}
+			elseif(isset($action) && $action == 'signup'){
+				$params['Password'] = password_hash($params['Password'], PASSWORD_DEFAULT);
+				try {
+					$insert_id = $validate->insert($table, $params);
+					$response = array(
+						'result' => 'ok',
+						'insert_id' => $insert_id
+					);
+				} catch (\Throwable $th) {
+					$response = array(
+						'result' => 'error',
+						'Error' => 'No se ha podido insertar el usuario'
+					);
+				}
+			}
+			else{
+				$insert_id = $validate->insert($table, $params);
+	
+				$response = array(
+					'result' => 'ok',
+					'insert_id' => $insert_id
+				);
+			}
 		}
 
-		$insert_id = $validate->insert($table, $params);
-
-		$response = array(
-			'result' => 'ok',
-			'insert_id' => $insert_id
-		);
+		
+		
 
 		Response::result(201, $response);
 

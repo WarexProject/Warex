@@ -51,7 +51,6 @@
 </template>
 
 <script setup lang='ts'>
-// Aquí puedes agregar tu lógica de Vue si es necesario
 </script>
 
 <style scoped>

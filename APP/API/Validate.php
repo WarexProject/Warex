@@ -25,17 +25,23 @@ class Validate extends Database
 	private $productPutFields = array('ProductName','TotalProductQuantity','Description','UnitPrice','ExpiryDate');
 
 
-	public function get($table, $params){
-		$responseError = array(
-			'result' => 'error',
-			'details' => 'Error en la solicitud'
-		);
-		if(!in_array($table, $this->tables) || !$this->validateGetParams($table, $params)){
-			Response::result(400, $responseError);
-			exit;
+	public function get($table, $params = null, $sql = null){
+		if(isset($sql) && !empty($sql)){
+			$data = parent::getDB($table, null, $sql);
 		}
-
-		$data = parent::getDB($table, $params);
+		else{
+			$responseError = array(
+				'result' => 'error',
+				'details' => 'Error en la solicitud'
+			);
+			if(!in_array($table, $this->tables) || !$this->validateGetParams($table, $params)){
+				Response::result(400, $responseError);
+				exit;
+			}
+	
+			$data = parent::getDB($table, $params);
+		}
+		
 		return $data;
 	}
 
