@@ -119,7 +119,7 @@
       <div class="file-input-section" v-if="selectedOption !== 'LOCATION'">
         <form @submit.prevent="uploadFile">
           <label for="">Selecciona tu archivo EXCEL de {{ selectedOption }}</label>
-          <input type="file" @change="handleFileUpload">
+          <input type="file" ref="inputFileEXCEL" @change="handleFileUpload">
         </form>
       </div>
       <div class="file-input-section" v-if="selectedOption === 'LOCATION'">
@@ -151,17 +151,32 @@
         <button v-if="selectedOption !== 'LOCATION'" @click="downloadTemplate(selectedOption)">Descargar plantilla de EXCEL de {{ selectedOption }}</button>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'SECTION'">
-        <select>
-          <option value="-1">Selecciona un WAREHOUSES</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+        <select v-model="selectedOptionSECTION">
+          <option disabled value="Selecciona un WAREHOUSES">Selecciona un WAREHOUSES</option>
+          <option v-for="warehouse in warehouses" :key="warehouse.WarehouseID" :value="warehouse.WarehouseID">
+            {{ warehouse.WarehouseID }}
+          </option>
         </select>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'SHELF'">
+        <select v-model="selectedOptionSHELF_WAREHOUSES">
+          <option disabled value="Selecciona un WAREHOUSES">Selecciona un WAREHOUSES</option>
+          <option v-for="warehouse in warehouses" :key="warehouse.WarehouseID" :value="warehouse.WarehouseID">
+            {{ warehouse.WarehouseID }}
+          </option>
+        </select>
+      </div>
+      <div class="dropdown-section" v-if="selectedOption === 'SHELF'">
+        <select v-model="selectedOptionSHELF">
+          <option disabled value="Selecciona un SECTION">Selecciona un SECTION</option>
+          <option v-for="sections in section" :key="sections.SectionID" :value="sections.SectionID">
+            {{ sections.SectionID }}
+          </option>
+        </select>
+      </div>
+      <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
         <select>
-          <option value="-1">Selecciona un SECTION</option>
+          <option disabled value="-1">Selecciona un WAREHOUSES</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -170,7 +185,7 @@
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
         <select>
-          <option value="-1">Selecciona un WAREHOUSES</option>
+          <option disabled value="-1">Selecciona un SECTION</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -179,7 +194,7 @@
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
         <select>
-          <option value="-1">Selecciona un SECTION</option>
+          <option disabled value="-1">Selecciona un SHELF</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -188,16 +203,7 @@
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
         <select>
-          <option value="-1">Selecciona un SHELF</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-      </div>
-      <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
-        <select>
-          <option value="-1">Selecciona un PRODUCTS</option>
+          <option disabled value="-1">Selecciona un PRODUCTS</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -212,14 +218,32 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios';
+import { getData } from '@/utils/crudAxios'
 
 const selectedOption = ref('WAREHOUSES')
+let selectedOptionSECTION = ref('Selecciona un WAREHOUSES')
+let selectedOptionSHELF = ref('Selecciona un SECTION')
+let selectedOptionSHELF_WAREHOUSES = ref('Selecciona un WAREHOUSES')
+const selectedFile = ref<File | null>(null);
+const inputFileEXCEL = ref<HTMLInputElement | null>(null);
+
+
+const warehouses = ref();
+const section = ref();
+
 
 const handleChange = () => {
   console.log(selectedOption.value)
+  if (selectedOption.value === 'SECTION') {
+    llamadaSECTION()
+    selectedOptionSECTION = ref('Selecciona un WAREHOUSES')
+  } else if (selectedOption.value === 'SHELF') {
+    llamadaSECTION()
+    selectedOptionSHELF_WAREHOUSES = ref('Selecciona un WAREHOUSES')
+    llamadaSHELF()
+    selectedOptionSHELF = ref('Selecciona un SECTION')
+  }
 }
-
-const selectedFile = ref<File | null>(null);
 
 function handleFileUpload(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -244,14 +268,34 @@ async function uploadFile() {
       },
     });
     if (response.data.message === undefined) {
-       alert('File uploaded successfully');
+      alert('File uploaded successfully');
     } else {
       alert(response.data.message);
     }
   } catch (error) {
     console.error('Error uploading file:', error);
     alert('Error uploading file. Check console for details.');
+  } finally {
+    // Limpiar el input file
+    if (inputFileEXCEL.value) {
+      inputFileEXCEL.value.value = '';
+    }
+    selectedFile.value = null; // También limpiamos el valor reactivo
   }
+}
+
+const llamadaSECTION = async () => {
+  //console.log(selectedOptionSECTION.value)
+  const respuesta = await getData('http://localhost/API', 'warehouses', 'CompanyID', '12345678A')
+  warehouses.value = respuesta.data;
+  console.log(warehouses.value)
+}
+
+const llamadaSHELF = async () => {
+  //console.log(selectedOptionSECTION.value)
+  const respuesta = await getData('http://localhost/API', 'section', 'CompanyID', '12345678A')
+  section.value = respuesta.data;
+  console.log(section.value)
 }
 
 const downloadTemplate = (queFichero: String) => {
