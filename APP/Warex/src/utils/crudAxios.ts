@@ -1,43 +1,54 @@
 import axios from 'axios';
-export const BASEURL: string = "http://localhost:3000";
+export const BASEURL: string = "http://localhost/API";
 
-export const saveData = async (url: string, table: string, data: any)  => {
+export const saveData = async (table: string, data: any)  => {
     try {
-        await axios.post(`${url}/${table}?accion=consulta`, data);
+        const response = await axios.post(`${BASEURL}/${table}`, data);
+        return response.data
     } catch (e) {
         console.log(e);
     }
 };
 
-export const getData = async (url: string, table: string, field: string, value: string): Promise<Array<any>> => {
+export const loginAPI = async (userData: { DNI: string, password: string, companyNIF: string })  => {
     try {
-        const response = await axios.get(`${url}/${table}?${field}=${value}`);
-        return response.data;
+        const response = await axios.post(`${BASEURL}/access?accion=login`, userData);
+        return response.data
+    } catch (e) {
+        console.log(e);
+        return null
+    }
+};
+
+export const getData = async (table: string, field: string, value: string): Promise<Array<any>> => {
+    try {
+        const response = await axios.get(`${BASEURL}/${table}?${field}=${value}`);
+        return response.data.data;
     } catch (error) {
         console.log(error);
         return [];
     }
 };
 
-export const updateData = async (url: string, table: string, id: string, newData: any) => {
+export const updateData = async (table: string, id: string, newData: any) => {
     try {
-        await axios.put(`${url}/${table}/${id}`, newData);
+        await axios.put(`${BASEURL}/${table}/${id}`, newData);
     } catch (error) {
         console.log(error);
     }
 };
 
-export const updateFieldData = async (url: string, table: string, id: string, field: string, value: any) => {
+export const updateFieldData = async (table: string, id: string, field: string, value: any) => {
     try {
-        await axios.patch(`${url}/${table}/${id}`, { [field]: value });
+        await axios.patch(`${BASEURL}/${table}/${id}`, { [field]: value });
     } catch (error) {
         console.log(error);
     }
 };
 
-export const deleteData = async (url: string, table: string, id: string) => {
+export const deleteData = async (table: string, id: string) => {
     try {
-        await axios.delete(`${url}/${table}/${id}`);
+        await axios.delete(`${BASEURL}/${table}/${id}`);
     } catch (error) {
         console.log(error);
     }
