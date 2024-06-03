@@ -7,22 +7,30 @@
             </div>
             <div class="inputsCont">
                 <div class="inputSignUp">
+                    <input type="text" placeholder="DNI" v-model="DNI">
+                </div>
+                <div class="inputSignUp">
                     <input type="text" placeholder="usuario" v-model="username">
                 </div>
                 <div class="inputSignUp">
-                    <input type="email" placeholder="email" v-model="email">
+                    <input type="text" placeholder="Nombre" v-model="name">
+                </div>
+                <div class="inputSignUp">
+                    <input type="text" placeholder="Apellido" v-model="lastname">
                 </div>
                 <div class="inputSignUp">
                     <input :type="showPassword ? 'text' : 'password'" placeholder="contraseña" v-model="password">
                     <font-awesome-icon class="eye" :icon="showPassword ? 'eye-slash' : 'eye'"
                         @click="showPassword = !showPassword" />
                 </div>
-                <div class="inputSignUp">
-                    <input :type="showPassword ? 'text' : 'password'" placeholder="confirmar contraseña"
-                        v-model="confPassword">
+                <div class="inputSelectCont">
+                    <select class="inputSelect" v-model="companyNIF">
+                        <option v-for="(elm, indx) in companies" :key="indx" :value="elm.NIF">{{ elm.CompanyName }}</option>
+                    </select>
                 </div>
             </div>
             <p class="errorMsj" v-if="isError">{{ errorMsj }}</p>
+            <p class="errorMsj" v-if="isRegistered">Usuario registrado correctamente</p>
             <button
                 class="btnSignUp"
                 @click.prevent="signUp()">
@@ -40,30 +48,108 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { getData } from '@/utils/crudAxios';
 import { RouterLink } from 'vue-router';
 import OverlayComp from '@/components/OverlayComp.vue'
 //
 
+const userStore = useUserStore()
+
+const companyNIF = ref('')
+const companies = ref<Array<any>>([]);
+
+const DNI = ref('')
 const username = ref('')
-const email = ref('')
+const name = ref('')
+const lastname = ref('')
 const password = ref('')
-const confPassword = ref('')
 
 const showPassword = ref(false)
 const isError = ref(false)
+const isRegistered = ref(false)
 const errorMsj = ref('')
 
 //
 
-const signUp = () => {
 
+const signUp = async () => {
+    const user = {
+        DNI: DNI.value,
+        UserName: username.value,
+        Name: name.value,
+        LastName: lastname.value,
+        Permissions: 'READ',
+        Password: password.value,
+        CompanyID: companyNIF.value
+    }
+    if(notEmpty()){
+        if(await userStore.signup(user)){
+            isRegistered.value = true
+        }
+        else{
+            errorMsj.value = 'Error. El Usuario ya existe'
+            isError.value = true
+        }
+    }
+    
+    clearFields()
 }
+
+
+const notEmpty = () => {
+    if(DNI.value.trim().length > 0 && username.value.trim().length > 0 && name.value.trim().length > 0 && lastname.value.trim().length > 0 && password.value.trim().length > 0 && companyNIF.value.trim().length > 0){
+        isError.value = false
+        return true
+    }
+    else{
+        errorMsj.value = 'Error. Debes rellenar todos los campos'
+        isError.value = true
+        return false
+    }
+}
+
+const getCompanies = async() => {
+    companies.value = await getData('companies', '', '')
+    companyNIF.value = companies.value[0].NIF
+}
+
+const clearFields = () => {
+    DNI.value = ''
+    username.value = ''
+    name.value = ''
+    lastname.value = ''
+    password.value = ''
+}
+
+onMounted(async () => {
+  await getCompanies();
+});
 
 </script>
 
 <style scoped>
 
+.inputSelectCont{
+    margin-top: 20px;
+    width: 100%;
+}
+.inputSelect{
+    font-size: medium;
+    display: flex;
+    padding: 8px 10px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.inputSelect:focus{
+    outline-style: none;
+}
+.welcomeCont p{
+    padding: 0;
+    margin: 0;
+}
 
 /*QUITAR ESTILOS POR DEFECTO*/
 .btnSignUp{
@@ -93,7 +179,7 @@ const signUp = () => {
     display: flex; 
     padding: 1.25rem; 
     flex-direction: column; 
-    gap: 2.5rem; 
+    gap: 20px; 
     justify-content: center; 
     align-items: center; 
     border-radius: 1rem; 
@@ -103,7 +189,9 @@ const signUp = () => {
 }
 
 .welcomeCont{
-    margin-bottom: 2.5rem; 
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     font-weight: 700; 
     text-align: center; 
 }

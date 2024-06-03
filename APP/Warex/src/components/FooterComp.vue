@@ -13,11 +13,11 @@
   const currentYear = new Date().getFullYear()
 
   const socialMedia = [
-    { link: '', icon: 'fa-brands fa-github' },
-    { link: '', icon: 'fa-brands fa-twitter' },
-    { link: '', icon: 'fa-brands fa-instagram' },
-    { link: '', icon: 'fa-brands fa-facebook' },
-    { link: '', icon: 'fa-brands fa-discord' },
+    { link: 'https://github.com/WarexProject/Warex', icon: 'fa-brands fa-github' },
+    { link: 'https://x.com/WarexProject', icon: 'fa-brands fa-twitter' },
+    { link: 'https://www.instagram.com/warexproject/', icon: 'fa-brands fa-instagram' },
+    { link: 'https://www.linkedin.com/in/warex-s-l-837722310/', icon: 'fa-brands fa-linkedin' },
+    { link: 'https://github.com/WarexProject/Warex', icon: 'fa-brands fa-discord' },
   ]
 
 </script>

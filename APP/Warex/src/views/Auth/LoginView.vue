@@ -8,12 +8,17 @@
             </div>
             <div class="inputsCont">
                 <div class="inputLogin">
-                    <input type="text" placeholder="usuario" v-model="username">
+                    <input type="text" placeholder="DNI" v-model="DNI">
                 </div>
                 <div class="inputLogin">
                     <input :type="showPassword ? 'text' : 'password'" placeholder="contraseña" v-model="password">
                     <font-awesome-icon class="eye" :icon="showPassword ? 'eye-slash' : 'eye'"
                         @click="showPassword = !showPassword" />
+                </div>
+                <div class="inputSelectCont">
+                    <select class="inputSelect" v-model="companyNIF">
+                        <option v-for="(elm, indx) in companies" :key="indx" :value="elm.NIF">{{ elm.CompanyName }}</option>
+                    </select>
                 </div>
             </div>
             <p class="errorMsj" v-if="isError">{{ errorMsj }}</p>
@@ -32,7 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { getData } from '@/utils/crudAxios';
 import { useUserStore } from '@/stores/userStore';
 import { RouterLink, useRouter } from 'vue-router'
 import OverlayComp from '@/components/OverlayComp.vue'
@@ -40,8 +46,10 @@ import OverlayComp from '@/components/OverlayComp.vue'
 //
 const userStore = useUserStore();
 const router = useRouter();
-const username = ref('')
+const DNI = ref('')
 const password = ref('')
+const companyNIF = ref('')
+const companies = ref<Array<any>>([]);
 
 const showPassword = ref(false)
 const isError = ref(false)
@@ -51,8 +59,9 @@ const errorMsj = ref('')
 
 const logIn = () => {
     const user = {
-        username: username.value,
-        password: password.value
+        DNI: DNI.value,
+        password: password.value,
+        companyNIF: companyNIF.value
     }
     if(notEmpty()){userStore.login(user)}
     
@@ -60,7 +69,7 @@ const logIn = () => {
 
 
 const notEmpty = () => {
-    if(username.value.trim().length > 0 && password.value.trim().length > 0){
+    if(DNI.value.trim().length > 0 && password.value.trim().length > 0){
         isError.value = false
         return true
     }
@@ -70,6 +79,16 @@ const notEmpty = () => {
         return false
     }
 }
+
+const getCompanies = async() => {
+    companies.value = await getData('companies', '', '')
+    companyNIF.value = companies.value[0].NIF
+}
+
+
+onMounted(async () => {
+  await getCompanies();
+});
 
 </script>
 
@@ -166,6 +185,22 @@ input {
 }
 input:focus{
     outline-style: none; 
+}
+
+.inputSelectCont{
+    margin-top: 20px;
+    width: 100%;
+}
+.inputSelect{
+    font-size: medium;
+    display: flex;
+    padding: 8px 10px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.inputSelect:focus{
+    outline-style: none;
 }
 
 .logo{

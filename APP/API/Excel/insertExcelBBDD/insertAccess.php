@@ -28,6 +28,10 @@ function insertarDatosACCESS ($ArDatos) {
         $companyID = $row['companyID'];
         $password = $row['password'];
         $lastName = $row['lastName'];
+        // Verificar si $nif y $companyName no están vacíos
+        if (empty($DNI) || empty($name) || empty($userName) || empty($companyID) || empty($password)) {
+            throw new Exception("Los datos vienen vacíos o incorrectos.");
+        }
         // Verificar validez de NIF y nombre de la empresa
         if (!verificarCompanyID($companyID) || !verificarCompanyID($DNI) || !verificarName($name) || !verificarName($userName)) {
             throw new Exception("Los datos vienen incorrectos.");
@@ -54,15 +58,13 @@ function insertarDatosACCESS ($ArDatos) {
     if ($inserto) {
         $sql = "INSERT INTO ACCESS (`DNI`, `Name`, `UserName`, `CompanyID`, `Password`) VALUES " . implode(", ", $values);
         $mysqli->query($sql);
-    } else if (!$inserto && !$inserto2) {
-        throw new Exception("No se ha insertado nada porque no viene datos o son incorrectos");
+        echo "Carga completada";
     }
 
     if ($inserto2) {
         $sql = "INSERT INTO ACCESS (`DNI`, `Name`, `UserName`, `CompanyID`, `Password`, `LastName`) VALUES " . implode(", ", $values2);
         $mysqli->query($sql);
-    } else if (!$inserto && !$inserto2) {
-        throw new Exception("No se ha insertado nada porque no viene datos o son incorrectos");
+        echo "Carga completada";
     }
 }
 ?>

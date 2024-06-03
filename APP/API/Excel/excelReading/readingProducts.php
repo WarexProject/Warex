@@ -26,15 +26,20 @@ function almacenarDatosProductsExcel($documenntoExcel) {
         $description = $hojaActual->getCell(Coordinate::stringFromColumnIndex(4) . $indiceFila)->getValue();
         $unitPrice = $hojaActual->getCell(Coordinate::stringFromColumnIndex(5) . $indiceFila)->getValue();
         $expiryDate = $hojaActual->getCell(Coordinate::stringFromColumnIndex(6) . $indiceFila)->getValue();
-        // Agregar datos al array
-        $data[] = [
-            'companyID' => $companyID,
-            'productName' => $productName,
-            'totalProductQuantity' => $totalProductQuantity,
-            'description' => $description,
-            'unitPrice' => $unitPrice,
-            'expiryDate' => $expiryDate
-        ];
+        // Verificar si los campos no están vacíos
+        if (!empty($companyID) && !empty($productName) && (!empty($totalProductQuantity) || $totalProductQuantity == 0) && !empty($unitPrice)) {
+            // Agregar datos al array
+            $data[] = [
+                'companyID' => $companyID,
+                'productName' => $productName,
+                'totalProductQuantity' => $totalProductQuantity,
+                'description' => $description,
+                'unitPrice' => $unitPrice,
+                'expiryDate' => $expiryDate
+            ];
+        } else {
+            throw new Exception("Los datos viene vacios o incorrectos.");
+        }
     }
     return $data;
 }
