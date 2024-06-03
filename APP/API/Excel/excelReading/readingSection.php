@@ -21,10 +21,15 @@ function almacenarDatosSectionExcel($documenntoExcel) {
     $data = []; // Array para almacenar los datos
     for ($indiceFila = 2; $indiceFila <= $numeroFilas; $indiceFila++) { // 2 para no incluir la cabecera
         $sectionName = $hojaActual->getCell(Coordinate::stringFromColumnIndex(1) . $indiceFila)->getValue();
-        // Agregar datos al array
-        $data[] = [
-            'sectionName' => $sectionName
-        ];
+        // Verificar si los campos no están vacíos
+        if (!empty($sectionName)) {
+            // Agregar datos al array
+            $data[] = [
+                'sectionName' => $sectionName
+            ];
+        } else {
+            throw new Exception("Los datos viene vacios o incorrectos");
+        }
     }
     return $data;
 }

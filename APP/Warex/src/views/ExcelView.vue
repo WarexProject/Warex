@@ -209,8 +209,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios';
+import { getDataByQuery } from '@/utils/crudAxios';
 
 const selectedOption = ref('WAREHOUSES')
 
@@ -278,6 +279,18 @@ const downloadTemplate = (queFichero: String) => {
   a.click();
   document.body.removeChild(a);
 };
+
+  const getSections = async (query: string) => { 
+    const response = await getDataByQuery({sql: query})
+    console.log(response.data)
+  }
+
+
+
+  onMounted(async () => {
+    const sql = "SELECT DISTINCT section.SectionID from section inner join warehouses on warehouses.WarehouseID = section.WarehouseID where warehouses.WarehouseID = 1 "
+    await getSections(sql);
+});
 
 
 </script>

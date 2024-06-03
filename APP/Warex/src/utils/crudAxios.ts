@@ -30,6 +30,16 @@ export const getData = async (table: string, field: string, value: string): Prom
     }
 };
 
+export const getDataByQuery = async (data: {sql: string})  => {
+    try {
+        const response = await axios.post(`${BASEURL}`, data);
+        return response.data
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
+};
+
 export const updateData = async (table: string, id: string, newData: any) => {
     try {
         await axios.put(`${BASEURL}/${table}/${id}`, newData);

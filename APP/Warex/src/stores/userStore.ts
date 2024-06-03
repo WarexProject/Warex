@@ -24,8 +24,7 @@ export const useUserStore = defineStore('user', () => {
 
   const login = async (userData: { DNI: string, password: string, companyNIF: string }) => {
     try {
-      const response = await loginAPI(userData);
-      console.log(response)
+      //const response = await loginAPI(userData);
       // const { token } = response.data;
       // setToken(token);
       // await fetchUserData();
@@ -40,7 +39,6 @@ export const useUserStore = defineStore('user', () => {
   const signup = async (userData: { DNI: string, UserName: string, Name: string, LastName: string, Permissions: string, Password: string, CompanyID: string }) => {
     try {
       const response = await saveData('access?accion=signup',userData);
-      console.log(response)
       if(response.Error){
         return false
       }

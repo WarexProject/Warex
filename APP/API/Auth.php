@@ -3,7 +3,7 @@ require 'vendor/autoload.php';
 use \Firebase\JWT\JWT;
 
 class Auth {
-    private $secretKey = 'your_secret_key';
+    private $secretKey = 'WarexProject_Key';
     private $algorithm = 'HS256';
     private $issuer = 'http://localhost/API';
     

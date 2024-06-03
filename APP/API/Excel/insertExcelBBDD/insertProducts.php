@@ -26,6 +26,10 @@ function insertarDatosPRODUCTS ($ArDatos) {
         $unitPrice = $row['unitPrice'];
         $description = $row['description'];
         $expiryDate = $row['expiryDate'];
+        // Verificar si $nif y $companyName no están vacíos
+        if (empty($companyID) || empty($productName) || $totalProductQuantity < 0  || empty($unitPrice)) {
+            throw new Exception("Los datos vienen vacíos o incorrectos.");
+        }
         // Verificar validez de NIF y nombre de la empresa
         if (!verificarCompanyID($companyID) || !verificarProductName($productName) || !verificarTotalProductQuantity($totalProductQuantity) || !verificarUnitPrice($unitPrice)) {
             throw new Exception("Los datos vienen incorrectos.");
@@ -63,8 +67,6 @@ function insertarDatosPRODUCTS ($ArDatos) {
         $sql = "INSERT INTO PRODUCTS (`CompanyID`, `ProductName`, `TotalProductQuantity`, `UnitPrice`, `Description`, `ExpiryDate`) VALUES " . implode(", ", $values);
         $mysqli->query($sql);
         echo "Carga completada";
-    } else {
-        throw new Exception("No se ha insertado nada porque no viene datos o son incorrectos");
     }
 }
 ?>
