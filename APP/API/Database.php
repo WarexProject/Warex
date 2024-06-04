@@ -19,26 +19,36 @@ class Database
 		$this->connection->set_charset("utf8mb4");
 	}
 
-	public function getDB($table, $extra = null, $sql = null){
-		if(isset($sql) && !empty($sql)){
-			$query = $sql;
+	public function getDB($table=null, $extra = null, $sql = null){
+		$query = "";
+		// he agregado esta parte
+		if($sql){
+			if (substr($sql, 0, 8) == 'opcion01') {
+				$WarehouseID = substr($sql, 8);
+				$query = "SELECT DISTINCT section.SectionID FROM section INNER JOIN warehouses ON warehouses.WarehouseID = section.WarehouseID WHERE warehouses.WarehouseID = $WarehouseID";
+			}
+			else if(substr($sql, 0, 8) == 'opcion02'){
+				
+			}
+			else{
+				return [];
+			}
 		}
-		else{
-			$query = "SELECT * FROM $table"; 
-		if($extra != null){
-
-			$query .= ' WHERE';
-
-			foreach ($extra as $key => $condition) {
-				$query .= ' '.$key.' = "'.$condition.'"';
-				if($extra[$key] != end($extra)){
-					$query .= " AND ";
+		else if($table){
+			$query = "SELECT * FROM $table";
+			if ($extra != null) {
+				$query .= ' WHERE';
+	
+				foreach ($extra as $key => $condition) {
+					$query .= ' ' . $key . ' = "' . $condition . '"';
+					if ($extra[$key] != end($extra)) {
+						$query .= " AND ";
+					}
 				}
 			}
 		}
-		}
-		$results = $this->connection->query($query); 
-		$resultArray = array(); 
+		$results = $this->connection->query($query);
+		$resultArray = array();
 
 		foreach ($results as $value) {
 			$resultArray[] = $value;

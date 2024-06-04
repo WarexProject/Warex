@@ -8,40 +8,34 @@ class Validate extends Database
 
 	private $tables = array('access', 'companies', 'warehouses', 'section', 'shelf', 'location', 'products');
 
-	private $accessGetFields = array('DNI','Name','LastName','UserName','Password','Permissions','CompanyID');
-	private $companyGetFields = array('NIF','CompanyName');
-	private $warehousesGetFields = array('WarehouseID','CompanyID','TotalProductQuantity','RefrigeratingChamber');
+	private $accessGetFields = array('DNI','Name','LastName','UserName','Password','Permissions','CompanyID'); 
+	private $companyGetFields = array('NIF','CompanyName'); 
+	private $warehousesGetFields = array('WarehouseID','CompanyID','TotalProductQuantity','RefrigeratingChamber'); 
 	private $sectionGetFields = array('SectionID','WarehouseID','SectionName');
-	private $shelfGetFields = array('ShelfID','SectionID','ShelfName');
-	private $locationGetFields = array('WarehouseID','ProductID','SectionID','ShelfID','TotalProductQuantity');
+	private $shelfGetFields = array('ShelfID','SectionID','ShelfName'); 
+	private $locationGetFields = array('WarehouseID','ProductID','SectionID','ShelfID','TotalProductQuantity'); 
 	private $productGetFields = array('ProductID','ProductName','TotalProductQuantity','Description','UnitPrice','ExpiryDate');
 
 	private $accessPutFields = array('Name','LastName','UserName','Password','Permissions');
-	private $companyPutFields = array('CompanyName',);
+	private $companyPutFields = array('CompanyName'); 
 	private $warehousesPutFields = array('TotalProductQuantity','RefrigeratingChamber');
 	private $sectionPutFields = array('SectionName');
 	private $shelfPutFields = array('ShelfName');
 	private $locationPutFields = array('TotalProductQuantity');
-	private $productPutFields = array('ProductName','TotalProductQuantity','Description','UnitPrice','ExpiryDate');
+	private $productPutFields = array('ProductName','TotalProductQuantity','Description','UnitPrice','ExpiryDate'); 
 
 
 	public function get($table, $params = null, $sql = null){
-		if(isset($sql) && !empty($sql)){
-			$data = parent::getDB($table, null, $sql);
+		$responseError = array(
+			'result' => 'error',
+			'details' => 'Error en la solicitud'
+		);
+		if (!in_array($table, $this->tables) || !$this->validateGetParams($table, $params)) {
+			Response::result(400, $responseError);
+			exit;
 		}
-		else{
-			$responseError = array(
-				'result' => 'error',
-				'details' => 'Error en la solicitud'
-			);
-			if(!in_array($table, $this->tables) || !$this->validateGetParams($table, $params)){
-				Response::result(400, $responseError);
-				exit;
-			}
-	
-			$data = parent::getDB($table, $params);
-		}
-		
+
+		$data = parent::getDB($table, $params);
 		return $data;
 	}
 
@@ -157,7 +151,6 @@ class Validate extends Database
 					}
 				}
 				return true;
-
 				
 			default:
 				return false;
