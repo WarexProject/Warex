@@ -44,7 +44,8 @@
             <li>
               <span>EXPLICACIÓN:</span> En esta opción de pestaña podrás indicar a qué almacén, qué
               sección en concreto de ese almacén y en qué estantería de la sección indicada quieres
-              guardar el producto seleccionado, así como la cantidad de ese producto que quieres almacenar.
+              guardar el producto seleccionado, así como la cantidad de ese producto que quieres
+              almacenar.
             </li>
           </ol>
         </div>
@@ -80,8 +81,8 @@
             de productos que hay.
           </li>
           <li>
-            <span>DESCRIPTION:</span> Este campo es OPCIONAL. Si deseas completarlo, debes
-            hacerlo indicando una breve descripción del producto.
+            <span>DESCRIPTION:</span> Este campo es OPCIONAL. Si deseas completarlo, debes hacerlo
+            indicando una breve descripción del producto.
           </li>
           <li>
             <span>UNIT PRICE:</span> Este campo debe completarse con la el valor unitario del
@@ -89,7 +90,7 @@
           </li>
           <li>
             <span>EXPIRY DATE:</span> Este campo es OPCIONAL. Si deseas completarlo, debes hacerlo
-             indicando la fecha de caducidad del producto en formato año/mes/día.
+            indicando la fecha de caducidad del producto en formato año/mes/día.
           </li>
         </ol>
       </div>
@@ -118,7 +119,7 @@
       <div class="file-input-section" v-if="selectedOption !== 'LOCATION'">
         <form @submit.prevent="uploadFile">
           <label for="">Selecciona tu archivo EXCEL de {{ selectedOption }}</label>
-          <input type="file" ref="inputFileEXCEL" @change="handleFileUpload">
+          <input type="file" ref="inputFileEXCEL" @change="handleFileUpload" />
         </form>
       </div>
       <div class="file-input-section" v-if="selectedOption === 'LOCATION'">
@@ -130,7 +131,9 @@
         />
       </div>
       <div class="button-section">
-        <button type="submit" v-if="selectedOption !== 'LOCATION'" @click="uploadFile">Subir EXCEL de {{ selectedOption }}</button>
+        <button type="submit" v-if="selectedOption !== 'LOCATION'" @click="uploadFile">
+          Subir EXCEL de {{ selectedOption }}
+        </button>
         <button v-if="selectedOption === 'LOCATION'">Guardar producto en la estantería</button>
       </div>
     </div>
@@ -147,12 +150,18 @@
         </select>
       </div>
       <div class="right-button-section">
-        <button v-if="selectedOption !== 'LOCATION'" @click="downloadTemplate(selectedOption)">Descargar plantilla de EXCEL de {{ selectedOption }}</button>
+        <button v-if="selectedOption !== 'LOCATION'" @click="downloadTemplate(selectedOption)">
+          Descargar plantilla de EXCEL de {{ selectedOption }}
+        </button>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'SECTION'">
         <select v-model="selectedOptionSECTION">
           <option disabled value="Selecciona un WAREHOUSES">Selecciona un WAREHOUSES</option>
-          <option v-for="warehouse in warehouses" :key="warehouse.WarehouseID" :value="warehouse.WarehouseID">
+          <option
+            v-for="warehouse in warehouses"
+            :key="warehouse.WarehouseID"
+            :value="warehouse.WarehouseID"
+          >
             {{ warehouse.WarehouseID }}
           </option>
         </select>
@@ -160,7 +169,11 @@
       <div class="dropdown-section" v-if="selectedOption === 'SHELF'">
         <select v-model="selectedOptionSHELF_WAREHOUSES">
           <option disabled value="Selecciona un WAREHOUSES">Selecciona un WAREHOUSES</option>
-          <option v-for="warehouse in warehouses" :key="warehouse.WarehouseID" :value="warehouse.WarehouseID">
+          <option
+            v-for="warehouse in warehouses"
+            :key="warehouse.WarehouseID"
+            :value="warehouse.WarehouseID"
+          >
             {{ warehouse.WarehouseID }}
           </option>
         </select>
@@ -211,25 +224,22 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import axios from 'axios';
-import { getData } from '@/utils/crudAxios'
+import { ref } from 'vue'
+import axios from 'axios'
+import { getData, getDataSQL } from '@/utils/crudAxios'
 
 const selectedOption = ref('WAREHOUSES')
 let selectedOptionSECTION = ref('Selecciona un WAREHOUSES')
 let selectedOptionSHELF = ref('Selecciona un SECTION')
 let selectedOptionSHELF_WAREHOUSES = ref('Selecciona un WAREHOUSES')
-const selectedFile = ref<File | null>(null);
-const inputFileEXCEL = ref<HTMLInputElement | null>(null);
+const selectedFile = ref<File | null>(null)
+const inputFileEXCEL = ref<HTMLInputElement | null>(null)
 
-
-const warehouses = ref();
-const section = ref();
-
+const warehouses = ref()
+const section = ref()
 
 const handleChange = () => {
   console.log(selectedOption.value)
@@ -245,97 +255,82 @@ const handleChange = () => {
 }
 
 function handleFileUpload(event: Event) {
-  const target = event.target as HTMLInputElement;
+  const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
-    selectedFile.value = target.files[0];
+    selectedFile.value = target.files[0]
   }
 }
 
 async function uploadFile() {
   if (!selectedFile.value) {
-    alert('Please select a file first!');
-    return;
+    alert('Please select a file first!')
+    return
   }
 
-  const formData = new FormData();
-  formData.append('archivo', selectedFile.value);
+  const formData = new FormData()
+  formData.append('archivo', selectedFile.value)
 
   try {
     const response = await axios.post('http://localhost/Excel/IndexExcel.php', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+        'Content-Type': 'multipart/form-data'
+      }
+    })
     if (response.data.message === undefined) {
-      alert('File uploaded successfully');
+      alert('File uploaded successfully')
     } else {
-      alert(response.data.message);
+      alert(response.data.message)
     }
   } catch (error) {
-    console.error('Error uploading file:', error);
-    alert('Error uploading file. Check console for details.');
+    console.error('Error uploading file:', error)
+    alert('Error uploading file. Check console for details.')
   } finally {
     // Limpiar el input file
     if (inputFileEXCEL.value) {
-      inputFileEXCEL.value.value = '';
+      inputFileEXCEL.value.value = ''
     }
-    selectedFile.value = null; // También limpiamos el valor reactivo
+    selectedFile.value = null // También limpiamos el valor reactivo
   }
 }
 
 const llamadaSECTION = async () => {
   //console.log(selectedOptionSECTION.value)
-  const respuesta = await getData('http://localhost/API', 'warehouses', 'CompanyID', '12345678A')
-  warehouses.value = respuesta.data;
+  const respuesta = await getData('warehouses', 'CompanyID', 'T02564753')
+  warehouses.value = respuesta
   console.log(warehouses.value)
 }
 
 const llamadaSHELF = async () => {
-  //console.log(selectedOptionSECTION.value)
-  const respuesta = await getData('http://localhost/API', 'section', 'CompanyID', '12345678A')
-  section.value = respuesta.data;
-  console.log(section.value)
-}
+    const respuesta = await getData('sql', 'sql', 'opcion01-1')
+    section.value = respuesta;
+    console.log(section.value);
+};
 
 const downloadTemplate = (queFichero: String) => {
   let filePath = ''
-  switch(queFichero) {
-    case "WAREHOUSES":
-      filePath = 'src/utils/plantillasEXCEL/warehouses.xlsx';
-      break;
-    case "PRODUCTS":
-      filePath = 'src/utils/plantillasEXCEL/products.xlsx';
-      break;
-    case "SECTION":
-      filePath = 'src/utils/plantillasEXCEL/section.xlsx';
-      break;
-    case "SHELF":
-      filePath = 'src/utils/plantillasEXCEL/shelf.xlsx';
-      break;
+  switch (queFichero) {
+    case 'WAREHOUSES':
+      filePath = 'src/utils/plantillasEXCEL/warehouses.xlsx'
+      break
+    case 'PRODUCTS':
+      filePath = 'src/utils/plantillasEXCEL/products.xlsx'
+      break
+    case 'SECTION':
+      filePath = 'src/utils/plantillasEXCEL/section.xlsx'
+      break
+    case 'SHELF':
+      filePath = 'src/utils/plantillasEXCEL/shelf.xlsx'
+      break
     default:
-      alert('No hemos encontrado la plantilla seleccionada.');
+      alert('No hemos encontrado la plantilla seleccionada.')
   }
-  const a = document.createElement('a');
-  a.href = filePath;
-  a.download = filePath.split('/').pop() || '';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-};
-
-  const getSections = async (query: string) => { 
-    const response = await getDataByQuery({sql: query})
-    console.log(response.data)
-  }
-
-
-
-  onMounted(async () => {
-    const sql = "SELECT DISTINCT section.SectionID from section inner join warehouses on warehouses.WarehouseID = section.WarehouseID where warehouses.WarehouseID = 1 "
-    await getSections(sql);
-});
-
-
+  const a = document.createElement('a')
+  a.href = filePath
+  a.download = filePath.split('/').pop() || ''
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+}
 </script>
 
 <style scoped>
@@ -469,8 +464,8 @@ const downloadTemplate = (queFichero: String) => {
 }
 
 span {
-color: var(--color-blue-electric);
-font-weight: bold;
+  color: var(--color-blue-electric);
+  font-weight: bold;
 }
 
 button {

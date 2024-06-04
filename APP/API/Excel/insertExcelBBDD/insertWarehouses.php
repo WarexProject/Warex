@@ -14,7 +14,8 @@ include_once "./fieldChechs/verifyWareHousesFields.php";
  * @return void
  * @throws Exception Si alguno de los campos de NIF o Nombre de la Empresa está vacío en alguna fila.
  */
-function insertarDatosWAREHOUSES ($ArDatos) {
+function insertarDatosWAREHOUSES($ArDatos)
+{
     // Insertar datos en la base de datos
     $inserto = false;
     $mysqli = conexionBBDD();
@@ -22,10 +23,6 @@ function insertarDatosWAREHOUSES ($ArDatos) {
         $companyID = $row['companyID'];
         $totalProductQuantity = $row['totalProductQuantity'];
         $refrigeratingChamber = $row['refrigeratingChamber'];
-        // Verificar si $nif y $companyName no están vacíos
-        if (empty($companyID) || empty($totalProductQuantity) || empty($refrigeratingChamber)) {
-            throw new Exception("Los datos vienen vacíos o incorrectos.");
-        }
         // Verificar validez de NIF y nombre de la empresa
         if (!verificarCompanyID($companyID) || !verificarTotalProductQuantity($totalProductQuantity) || !verificarRefrigeratingChamber($refrigeratingChamber)) {
             throw new Exception("Los datos vienen incorrectos.");
@@ -41,9 +38,7 @@ function insertarDatosWAREHOUSES ($ArDatos) {
     if ($inserto) {
         $sql = "INSERT INTO WAREHOUSES (CompanyID, TotalProductQuantity, RefrigeratingChamber) VALUES " . implode(", ", $values);
         $mysqli->query($sql);
-        echo "Carga completada";
     } else {
-        throw new Exception ("No se ha insertado nada porque no viene datos o son incorrectos");
+        throw new Exception("No se ha insertado nada porque no viene datos o son incorrectos");
     }
 }
-?>
