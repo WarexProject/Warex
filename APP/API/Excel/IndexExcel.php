@@ -44,14 +44,16 @@ if (isset($_FILES["archivo"]) && !empty($_FILES["archivo"]["name"])) {
                 include_once 'excelReading/readingSection.php';
                 include_once 'insertExcelBBDD/insertSection.php';
                 $data = almacenarDatosSectionExcel($_FILES["archivo"]["tmp_name"]);
-                insertarDatosSECTION($data, 12);
+                $selectedOption = $_POST['option']; // Capturar el valor del select enviado desde Vue.js
+                insertarDatosSECTION($data, $selectedOption);
                 echo json_encode(["status" => "success", "message" => "File processed successfully."]);
                 break;
             case "shelf.xlsx":
                 include_once 'excelReading/readingShelf.php';
                 include_once 'insertExcelBBDD/insertShelf.php';
                 $data = almacenarDatosShelfExcel($_FILES["archivo"]["tmp_name"]);
-                insertarDatosSHELF($data, 12);
+                $selectedOption = $_POST['option']; // Capturar el valor del select enviado desde Vue.js
+                insertarDatosSHELF($data, $selectedOption);
                 echo json_encode(["status" => "success", "message" => "File processed successfully."]);
                 break;
             case "companies.xlsx":

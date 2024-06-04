@@ -38,7 +38,7 @@
               producto que deseas almacenar en el alamcén indicado.
             </li>
             <li>
-              <span>CANTIDAD DEL PRODUCTO:</span> Inndica la cantidad de productos que deseas
+              <span>CANTIDAD DEL PRODUCTO:</span> Indica la cantidad de productos que deseas
               almacenar en el lamcén indicado.
             </li>
             <li>
@@ -127,6 +127,7 @@
           type="number"
           placeholder="CANTIDAD DEL PRODUCTO"
           id="CatPro"
+          v-model="cantidadProduct"
           style="width: 100%; text-align: center"
         />
       </div>
@@ -134,7 +135,7 @@
         <button type="submit" v-if="selectedOption !== 'LOCATION'" @click="uploadFile">
           Subir EXCEL de {{ selectedOption }}
         </button>
-        <button v-if="selectedOption === 'LOCATION'">Guardar producto en la estantería</button>
+        <button v-if="selectedOption === 'LOCATION'" @click="guardarEstanteria">Guardar producto en la estantería</button>
       </div>
     </div>
 
@@ -167,7 +168,7 @@
         </select>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'SHELF'">
-        <select v-model="selectedOptionSHELF_WAREHOUSES">
+        <select v-model="selectedOptionSHELF_WAREHOUSES" @change="llamadaSHELF(selectedOptionSHELF_WAREHOUSES)">
           <option disabled value="Selecciona un WAREHOUSES">Selecciona un WAREHOUSES</option>
           <option
             v-for="warehouse in warehouses"
@@ -182,44 +183,44 @@
         <select v-model="selectedOptionSHELF">
           <option disabled value="Selecciona un SECTION">Selecciona un SECTION</option>
           <option v-for="sections in section" :key="sections.SectionID" :value="sections.SectionID">
-            {{ sections.SectionID }}
+            {{ sections.SectionName }}
           </option>
         </select>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
-        <select>
-          <option disabled value="-1">Selecciona un WAREHOUSES</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+        <select v-model="selectedOptionLOCATION_WAREHOUSES" @change="llamadaLOCATION_SECTION(selectedOptionLOCATION_WAREHOUSES)">
+          <option disabled value="Selecciona un WAREHOUSES">Selecciona un WAREHOUSES</option>
+          <option
+            v-for="warehouse in warehouses"
+            :key="warehouse.WarehouseID"
+            :value="warehouse.WarehouseID"
+          >
+            {{ warehouse.WarehouseID }}
+          </option>
         </select>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
-        <select>
-          <option disabled value="-1">Selecciona un SECTION</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+        <select v-model="selectedOptionLOCATION_SECTION" @change="llamadaLOCATION_SHELF(selectedOptionLOCATION_SECTION)">
+          <option disabled value="Selecciona un SECTION">Selecciona un SECTION</option>
+          <option v-for="sections in section" :key="sections.SectionID" :value="sections.SectionID">
+            {{ sections.SectionName }}
+          </option>
         </select>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
-        <select>
-          <option disabled value="-1">Selecciona un SHELF</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+        <select v-model="selectedOptionLOCATION_SHELF" @change="llamadaPRODUCTS()">
+          <option disabled value="Selecciona un SHELF">Selecciona un SHELF</option>
+          <option v-for="shelfs in shelf" :key="shelfs.ShelfID" :value="shelfs.ShelfID">
+            {{ shelfs.ShelfName }}
+          </option>
         </select>
       </div>
       <div class="dropdown-section" v-if="selectedOption === 'LOCATION'">
-        <select>
-          <option disabled value="-1">Selecciona un PRODUCTS</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+        <select v-model="selectedOptionLOCATION_PRODUCTS">
+          <option disabled value="Selecciona un PRODUCTS">Selecciona un PRODUCTS</option>
+          <option v-for="products in product" :key="products.ProductID" :value="products.ProductID">
+            {{ products.ProductName }}
+          </option>
         </select>
       </div>
     </div>
@@ -229,17 +230,24 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
-import { getData, getDataSQL } from '@/utils/crudAxios'
+import { getData, saveData } from '@/utils/crudAxios'
 
 const selectedOption = ref('WAREHOUSES')
 let selectedOptionSECTION = ref('Selecciona un WAREHOUSES')
 let selectedOptionSHELF = ref('Selecciona un SECTION')
 let selectedOptionSHELF_WAREHOUSES = ref('Selecciona un WAREHOUSES')
+let selectedOptionLOCATION_WAREHOUSES = ref('Selecciona un WAREHOUSES')
+let selectedOptionLOCATION_SECTION = ref('Selecciona un SECTION')
+let selectedOptionLOCATION_SHELF = ref('Selecciona un SHELF')
+let selectedOptionLOCATION_PRODUCTS = ref('Selecciona un PRODUCTS')
 const selectedFile = ref<File | null>(null)
 const inputFileEXCEL = ref<HTMLInputElement | null>(null)
 
 const warehouses = ref()
 const section = ref()
+const shelf = ref()
+const product = ref()
+let cantidadProduct = ref('')
 
 const handleChange = () => {
   console.log(selectedOption.value)
@@ -249,8 +257,9 @@ const handleChange = () => {
   } else if (selectedOption.value === 'SHELF') {
     llamadaSECTION()
     selectedOptionSHELF_WAREHOUSES = ref('Selecciona un WAREHOUSES')
-    llamadaSHELF()
-    selectedOptionSHELF = ref('Selecciona un SECTION')
+  } else if (selectedOption.value === 'LOCATION') {
+    llamadaSECTION()
+    selectedOptionSHELF_WAREHOUSES = ref('Selecciona un WAREHOUSES')
   }
 }
 
@@ -266,9 +275,15 @@ async function uploadFile() {
     alert('Please select a file first!')
     return
   }
-
+  
   const formData = new FormData()
   formData.append('archivo', selectedFile.value)
+
+  if (selectedOption.value == 'SECTION') {
+    formData.append('option', selectedOptionSECTION.value) // Añadir el valor del select al FormData
+  } else if (selectedOption.value == 'SHELF') {
+    formData.append('option', selectedOptionSHELF.value) // Añadir el valor del select al FormData
+  }
 
   try {
     const response = await axios.post('http://localhost/Excel/IndexExcel.php', formData, {
@@ -291,6 +306,14 @@ async function uploadFile() {
     }
     selectedFile.value = null // También limpiamos el valor reactivo
   }
+  
+}
+
+const guardarEstanteria = async () => {
+  let $locationSHELF = {WarehouseID: selectedOptionLOCATION_WAREHOUSES.value,ProductID: selectedOptionLOCATION_PRODUCTS.value, SectionID: selectedOptionLOCATION_SECTION.value, ShelfID: selectedOptionLOCATION_SHELF.value, TotalProductQuantity: cantidadProduct.value}
+  await saveData('location', $locationSHELF)
+  console.log($locationSHELF)
+  alert('Pruducto almacenado correctamente en la estantería')
 }
 
 const llamadaSECTION = async () => {
@@ -300,11 +323,37 @@ const llamadaSECTION = async () => {
   console.log(warehouses.value)
 }
 
-const llamadaSHELF = async () => {
-    const respuesta = await getData('sql', 'sql', 'opcion01-1')
+const llamadaSHELF = async (opcion: any) => {
+    const opcionSQL = 'opcion01' + opcion
+    const respuesta = await getData('sql', 'sql', opcionSQL)
     section.value = respuesta;
-    console.log(section.value);
+  console.log(section.value);
+    selectedOptionSHELF = ref('Selecciona un SECTION')
 };
+
+const llamadaLOCATION_SECTION = async (opcion: any) => {
+    const opcionSQL = 'opcion01' + opcion
+    const respuesta = await getData('sql', 'sql', opcionSQL)
+    section.value = respuesta;
+  console.log(section.value);
+    selectedOptionLOCATION_SECTION = ref('Selecciona un SECTION')
+};
+
+const llamadaLOCATION_SHELF = async (opcion: any) => {
+    const opcionSQL = 'opcion02' + opcion
+    const respuesta = await getData('sql', 'sql', opcionSQL)
+    shelf.value = respuesta;
+  console.log(shelf.value);
+    selectedOptionLOCATION_SHELF = ref('Selecciona un SHELF')
+};
+
+const llamadaPRODUCTS = async () => {
+  //console.log(selectedOptionSECTION.value)
+  const respuesta = await getData('products', 'CompanyID', 'T02564753')
+  product.value = respuesta
+  console.log(product.value)
+  selectedOptionLOCATION_PRODUCTS = ref('Selecciona un PRODUCTS')
+}
 
 const downloadTemplate = (queFichero: String) => {
   let filePath = ''
