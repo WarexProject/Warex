@@ -25,10 +25,11 @@ class Database
 		if($sql){
 			if (substr($sql, 0, 8) == 'opcion01') {
 				$WarehouseID = substr($sql, 8);
-				$query = "SELECT DISTINCT section.SectionID FROM section INNER JOIN warehouses ON warehouses.WarehouseID = section.WarehouseID WHERE warehouses.WarehouseID = $WarehouseID";
+				$query = "SELECT DISTINCT section.SectionID, section.SectionName FROM section INNER JOIN warehouses ON warehouses.WarehouseID = section.WarehouseID WHERE warehouses.WarehouseID = $WarehouseID";
 			}
 			else if(substr($sql, 0, 8) == 'opcion02'){
-				
+				$SectionID = substr($sql, 8);
+				$query = "SELECT DISTINCT shelf.ShelfID, shelf.ShelfName FROM shelf INNER JOIN section ON section.SectionID = shelf.SectionID WHERE section.SectionID = $SectionID";
 			}
 			else{
 				return [];
