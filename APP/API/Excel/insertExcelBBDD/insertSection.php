@@ -15,6 +15,7 @@ include_once "./fieldChechs/verifySectionShelfFields.php";
  * @throws Exception Si alguno de los campos de NIF o Nombre de la Empresa está vacío en alguna fila.
  */
 function insertarDatosSECTION ($ArDatos, $almacenID) {
+    $inserto = false;
     // Insertar datos en la base de datos
     if (!is_numeric($almacenID)) {
         throw new Exception("El almacen selecionado no existe.");
@@ -23,10 +24,6 @@ function insertarDatosSECTION ($ArDatos, $almacenID) {
     $mysqli = conexionBBDD();
     foreach ($ArDatos as $row) {
         $sectionName = $row['sectionName'];
-        // Verificar si $nif y $companyName no están vacíos
-        if (empty($sectionName)) {
-            throw new Exception("Los datos vienen vacíos o incorrectos.");
-        }
         // Verificar validez de NIF y nombre de la empresa
         if (!verificarName($sectionName)) {
             throw new Exception("Los datos vienen incorrectos.");
@@ -34,9 +31,13 @@ function insertarDatosSECTION ($ArDatos, $almacenID) {
         // Escapar los valores para evitar SQL injection
         $sectionName = $mysqli->real_escape_string($sectionName);
         $values[] = "($almacenID, '$sectionName')";
+        $inserto = true;
     }
-    $sql = "INSERT INTO SECTION (`WarehouseID`, `SectionName`) VALUES " . implode(", ", $values);
-    $mysqli->query($sql);
-    echo "Carga completada";
+    if ($inserto) {
+        $sql = "INSERT INTO SECTION (`WarehouseID`, `SectionName`) VALUES " . implode(", ", $values);
+        $mysqli->query($sql);
+    } else {
+        throw new Exception("No se ha insertado nada porque no viene datos o son incorrectos");
+    }
 }
 ?>
