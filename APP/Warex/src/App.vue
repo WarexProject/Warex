@@ -10,17 +10,14 @@ const router = useRouter()
 const userStore = useUserStore()
 
 
-/*
-onMounted(() => {
-  localStorage.setItem('tokenWarex', 'hola');
-  const token = localStorage.getItem('tokenWarex');
-  if (token) {
-    userStore.login({DNI: 'Mario', password: 'hola'})
-  } else {
-    router.push('/login');
+
+onMounted(async() => {
+  if(await userStore.fetchUserData()){
+    userStore.isAuthenticated = true
+    router.push('/')
   }
 });
-*/
+
 
 </script>
 

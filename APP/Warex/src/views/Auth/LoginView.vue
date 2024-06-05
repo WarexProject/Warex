@@ -49,12 +49,20 @@ const errorMsj = ref('')
 
 //
 
-const logIn = () => {
+const logIn =  async () => {
     const user = {
         DNI: DNI.value,
         password: password.value,
     }
-    if(notEmpty()){userStore.login(user)}
+    if(notEmpty()){
+        if(await userStore.login(user)){
+            router.push('/')
+        }
+        else{
+            errorMsj.value = 'Error. Credenciales incorrectos'
+            isError.value = true
+        }
+    }
     
 }
 
