@@ -1,10 +1,22 @@
 <template>
   <div class="container">
     <div class="dataCont">
-      <h2 class="dataTitle">Datos de {{selectedTable.esp}}</h2>
-      <div class="data">
-        <p>Número total de {{ selectedTable.esp }}: {{ items.length }}</p>
-        <p>Número total de {{ selectedTable.esp }}: {{ items.length }}</p>
+      <div class="dataShow">
+        <h2 class="dataTitle">Datos de Almacén</h2>
+        <div class="data">
+          <p>ID Almacén: {{ items.length }}</p>
+          <p>Cantidad total de secciones: {{ items.length }}</p>
+          <p>Cantidad total de Estanterías: {{ items.length }}</p>
+          <p>Cantidad total de productos: {{ items.length }}</p>
+          <p>Cámara Frigorífica: </p>
+          <p>Empresa: Mercanza S.L </p>
+        </div>
+      </div>
+      <div class="buttonCont">
+        <div class="deleteBtn" v-if="!isEditing" @click="clickEdit"> Modificar Elemento</div>
+        <div class="deleteBtn" v-if="!isEditing" @click="clickAceptEdit">Eliminar elemento</div>
+        <div class="deleteBtn" v-if="isEditing" @click="clickDeleteSingleItem">Guardar Cambios</div>
+        <div class="deleteBtn" v-if="isEditing" @click="clickCancelEdit">Cancelar</div>
       </div>
     </div>
     <div class="tableCont">
@@ -43,20 +55,20 @@
         :searchField="searchField"
         :searchValue="searchValue"
         :tableHeight="460"
+        @clickRow="showRow"
       />
       <div class="buttons">
         <div class="deleteBtn" v-if="itemsSelected.length > 0"  @click="deleteItems">
           Eliminar seleccionados: {{ itemsSelected.length }}
         </div>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script setup lang='ts'>
 import { ref, onMounted, watch } from 'vue';
-import type { Header, Item } from "vue3-easy-data-table";
+import type { Header, Item, ClickRowArgument  } from "vue3-easy-data-table";
 import { getData } from '@/utils/crudAxios';
 import type Table from '@/interfaces/table';
 
@@ -151,6 +163,11 @@ const searchField = ref('')
 const searchValue = ref('')
 const searchText = ref('')
 
+const isEditing = ref(false)
+
+
+
+
 const clickSearch = () => {
   searchValue.value = searchText.value
 }
@@ -159,6 +176,10 @@ const resetFilter = () => {
   searchText.value = ''
   searchField.value = ''
 }
+
+const showRow = (item: ClickRowArgument) => {
+  console.log(item);
+};
 
 //FUNCION QUE CARGA EL ARRAY DE COLUMNAS Y LOS DATOS
 const getItems = () => {
@@ -205,6 +226,21 @@ onMounted(() => {
     isLoading.value = false;
   }, 2000);
 });
+
+
+//EDITAR Y MODIFICAR UN ELEMENTO
+const clickEdit = () => {
+  isEditing.value = true
+}
+const clickDeleteSingleItem = () => {
+}
+const clickAceptEdit = () => {
+}
+const clickCancelEdit = () => {
+  isEditing.value = false
+}
+
+
 </script>
 
 <style scoped>
@@ -221,14 +257,37 @@ onMounted(() => {
   flex-direction: column;
   background-color: #ffffff;
   padding: 10px 20px;
-  gap: 10px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   width: 20%;
 }
 
+.dataShow{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 70%;
+}
+
 .dataTitle{
   text-align: center;
+}
+
+.data{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 20px;
+}
+
+.buttonCont{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  height: 30%;
+  gap: 20px;
 }
 
 .tableCont{
@@ -399,9 +458,12 @@ onMounted(() => {
 .deleteBtn{
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: #eee;
   border-radius: 5px;
   cursor: pointer;
   padding: 10px;
+  width: 180px;
+  gap: 20px;
 }
 </style>

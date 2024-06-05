@@ -7,14 +7,14 @@ class Auth {
     private $algorithm = 'HS256';
     private $issuer = 'http://localhost/API';
     
-    public function generateToken($userId) {
+    public function generateToken($DNI) {
         $issuedAt = time();
         $expirationTime = $issuedAt + (60 * 60); // Expiración del token (1 hora)
         $payload = array(
             'iss' => $this->issuer,
             'iat' => $issuedAt,
             'exp' => $expirationTime,
-            'sub' => $userId
+            'sub' => $DNI
         );
         return JWT::encode($payload, $this->secretKey, $this->algorithm);
     }

@@ -2,11 +2,12 @@
   <div class="headerComp">
       <header>
           <div class="userMenuContainer">
-              <RouterLink to="/user" class="userLink">
+              <div class="userLink">
                   <font-awesome-icon icon="user" class="userIcon" style="color: #ffffff;" />
-              </RouterLink>
+              </div>
               <div class="userMenu">
                   <RouterLink to="/user" class="userMenuItem">Mi Perfil</RouterLink>
+                  <RouterLink to="/admin" class="userMenuItem" v-if="userStore.user?.permissions == 'ALL'">Admin</RouterLink>
                   <button @click="logout" class="userMenuBtn">Cerrar sesión</button>
               </div>
           </div>

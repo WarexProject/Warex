@@ -4,6 +4,7 @@ import AuthHomeView from '@/views/Auth/AuthHomeView.vue'
 import LoginView from '@/views/Auth/LoginView.vue'
 import HomeView from '@/views/HomeView.vue'
 import DataView from '@/views/DataView.vue'
+import AdminView from '@/views/AdminView.vue'
 import UserView from '@/views/UserView.vue'
 import ExcelView from '@/views/ExcelView.vue'
 import StatsView from '@/views/StatsView.vue'
@@ -64,6 +65,14 @@ const router = createRouter({
       path: '/stats',
       name: 'stats',
       component: StatsView,
+      meta: { 
+        authRequired: true 
+      }
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminView,
       meta: { 
         authRequired: true 
       }

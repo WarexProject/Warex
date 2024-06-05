@@ -17,9 +17,17 @@ export const useUserStore = defineStore('user', () => {
   const login = async (userData: { DNI: string, password: string}) => {
     try {
       //const response = await loginAPI(userData);
-      // const { token } = response.data;
+      //const user = response.data
+      //const { token } = response.token;
       // setToken(token);
       // await fetchUserData();
+      user.value = {
+        DNI: userData.DNI,
+        username: 'mariomg',
+        email: 'mario@mail.com',
+        idCompany: '1',
+        permissions: 'READ',
+      }
       isAuthenticated.value = true;
       router.push('/');
     } catch (error) {
