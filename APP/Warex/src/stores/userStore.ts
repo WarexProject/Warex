@@ -3,15 +3,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import router from '@/router/index';
 import { loginAPI, saveData } from '@/utils/crudAxios';
-
-interface User {
-  id: string;
-  DNI: string;
-  username: string;
-  email: string;
-  idCompany: string;
-  permissions: string;
-}
+import type User from '@/interfaces/user';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
@@ -22,7 +14,7 @@ export const useUserStore = defineStore('user', () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   };
 
-  const login = async (userData: { DNI: string, password: string, companyNIF: string }) => {
+  const login = async (userData: { DNI: string, password: string}) => {
     try {
       //const response = await loginAPI(userData);
       // const { token } = response.data;
@@ -32,19 +24,6 @@ export const useUserStore = defineStore('user', () => {
       router.push('/');
     } catch (error) {
       console.error('Error Inicio Sesión', error);
-      return false
-    }
-  };
-
-  const signup = async (userData: { DNI: string, UserName: string, Name: string, LastName: string, Permissions: string, Password: string, CompanyID: string }) => {
-    try {
-      const response = await saveData('access?accion=signup',userData);
-      if(response.Error){
-        return false
-      }
-      return true
-    } catch (error) {
-      console.error('Error Registro Usuario', error);
       return false
     }
   };
@@ -86,7 +65,6 @@ export const useUserStore = defineStore('user', () => {
   return {
     user,
     isAuthenticated,
-    signup,
     login,
     logout,
     initialize

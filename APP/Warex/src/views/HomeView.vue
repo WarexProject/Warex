@@ -12,26 +12,42 @@ const date = new Date()
     <div class="components-panel">
       <DatePicker class="calendar" v-model="date" style="font-weight:bolder; color: var(--color-green-light);"></DatePicker>
       <vueClock class="clock"></vueClock>
+      <div class="userCard">
+        <font-awesome-icon icon="user" class="userDataIcon"/>
+        <hr>
+        <div class="userData">
+          <p class="userName">Mario Martín</p>
+          <p class="companyName">Mercanza S.L</p>
+        </div>
+      </div>
     </div>
 
     <div class="info-panel">
-      <img src="@/assets/img/information-icon.png" alt="" class="info-icon">
       <div class="show-info-panel">
-        <h2 id="info-titulo" style="text-align: center;">Información general</h2>
+        <div class="infoHeader">
+          <img src="@/assets/img/information-icon.png" alt="" class="info-icon">
+          <h2 id="info-titulo" style="text-align: center;">Información general</h2>
+        </div>
         <div class="info-item">
-          <font-awesome-icon icon="building" class="buildingIcon" style="color: var(--color-green-light); font-size: 30px; margin-left: 5px"/>
+          <font-awesome-icon icon="building" class="buildingIcon infoItemIcon"/>
           <h2><strong>Tu empresa</strong></h2>
           <h3 style="color: green">Empresa 1</h3>
         </div>
         <hr>
         <div class="info-item">
-          <font-awesome-icon icon="warehouse" class="warehouseIcon" style="color: var(--color-green-light); font-size: 30px;"/>
+          <font-awesome-icon icon="warehouse" class="warehouseIcon infoItemIcon"/>
           <h2><strong>Almacenes registrados</strong></h2>
           <h3 style="color: green">5 almacenes</h3>
         </div>
         <hr>
         <div class="info-item">
-          <font-awesome-icon icon="box" class="boxIcon" style="color: var(--color-green-light); font-size: 30px;"/>
+          <font-awesome-icon icon="box" class="boxIcon infoItemIcon"/>
+          <h2><strong>Productos almacenados</strong></h2>
+          <h3 style="color: green">1.200 productos</h3>
+        </div>
+        <hr>
+        <div class="info-item">
+          <font-awesome-icon icon="box" class="boxIcon infoItemIcon"/>
           <h2><strong>Productos almacenados</strong></h2>
           <h3 style="color: green">1.200 productos</h3>
         </div>
@@ -51,50 +67,61 @@ const date = new Date()
   padding: 20px;
   gap: 30px;
   justify-content: center;
-  align-items: flex-start;
 }
 
 .info-panel {
-  position: relative; /* Asegura que los elementos absolutos se posicionen relativos a este */
   background-color: #ffffff;
-  padding: 20px;
+  padding: 40px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   width: 90%;
-  height: 430px;
+}
+
+.infoHeader{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.info-titulo{
+  width: 100%;
+  text-align: center;
 }
 
 .info-icon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-top: 20px; /* Ajusta según sea necesario */
-  margin-right: 20px; /* Ajusta según sea necesario */
   width: 45px;
 }
 
+
 .show-info-panel {
-  display: flex; /* Utilizamos flexbox para distribuir los elementos */
-  flex-direction: column; /* Columna para apilar los elementos verticalmente */
-  justify-content: space-between; /* Espaciado entre los elementos */
-  height: 90%; /* Para que ocupe toda la altura del contenedor */
+  display: flex; 
+  gap: 10px;
+  flex-direction: column; 
+  height: 100%; 
 }
 
 .info-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
+  width: 100%;
+  gap: 10%;
+}
+
+.infoItemIcon{
+  color: var(--color-green-light); 
+  width: 10%;
+  height: 30px;
 }
 
 .info-item h2 {
   margin: 0;
-  margin-left: 10px; /* Espacio entre el icono y el h2 */
-  flex: 1; /* El h2 ocupará todo el espacio restante */
+  width: 40%;
 }
 
 .info-item h3 {
-  margin-top: 30px;
+  width: 30%;
 }
 
 .components-panel {
@@ -115,6 +142,36 @@ const date = new Date()
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   border-radius: 20%;
+}
+
+.userCard{
+  background-color: white;
+  padding: 20px;
+  width: 80%;
+  height: 100px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border-radius: 20px;
+}
+
+.userDataIcon{
+  color: var(--color-green-light); 
+  width: 10%;
+  height: 25px;
+}
+
+.userData{
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  gap: 8px;
+}
+.userData p{
+  margin: 0;
+  padding: 0;
+}
+.userData .userName{
+  font-size: x-large;
 }
 
 .calendar {

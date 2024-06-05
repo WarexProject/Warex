@@ -29,6 +29,7 @@
     "vue": "^3.4.21",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^4.3.0",
+    "vue3-easy-data-table": "^1.5.47",
     "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {

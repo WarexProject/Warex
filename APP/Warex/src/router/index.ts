@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import AuthHomeView from '@/views/Auth/AuthHomeView.vue'
 import LoginView from '@/views/Auth/LoginView.vue'
-import SignupView from '@/views/Auth/SignupView.vue'
 import HomeView from '@/views/HomeView.vue'
 import DataView from '@/views/DataView.vue'
 import UserView from '@/views/UserView.vue'
@@ -37,15 +36,6 @@ const router = createRouter({
         authRequired: false 
       }
     },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: SignupView,
-      meta: { 
-        authRequired: false 
-      }
-    },
-    
     {
       path: '/user',
       name: 'user',

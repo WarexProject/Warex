@@ -6,8 +6,7 @@
       <div class="buttons">
         <RouterLink class="btnLogin" to="/login">Iniciar Sesión
         </RouterLink>
-        <p>¿Aún no tienes una cuenta?. <RouterLink class="signUpLink" to="/signup">Regístrate
-          </RouterLink>
+        <p>¿Aún no tienes una cuenta?. Un administrador de tu empresa deberá registrarte.
         </p>
       </div>
     </div>

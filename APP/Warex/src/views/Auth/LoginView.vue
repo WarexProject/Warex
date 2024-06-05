@@ -15,11 +15,6 @@
                     <font-awesome-icon class="eye" :icon="showPassword ? 'eye-slash' : 'eye'"
                         @click="showPassword = !showPassword" />
                 </div>
-                <div class="inputSelectCont">
-                    <select class="inputSelect" v-model="companyNIF">
-                        <option v-for="(elm, indx) in companies" :key="indx" :value="elm.NIF">{{ elm.CompanyName }}</option>
-                    </select>
-                </div>
             </div>
             <p class="errorMsj" v-if="isError">{{ errorMsj }}</p>
             <button
@@ -27,9 +22,7 @@
                 @click.prevent="logIn()">
                 Iniciar Sesión
             </button>
-            <p>¿Aún no tienes una cuenta?. <RouterLink class="signUpLink" to="/signup">Regístrate
-                </RouterLink>
-            </p>
+            <p class="message">¿Aún no tienes una cuenta?. <br> Un administrador de tu empresa deberá registrarte.</p>
         </div>
     </div>
     <RouterLink to="/auth"><font-awesome-icon icon="arrow-left" class="btnBack" /></RouterLink>
@@ -48,8 +41,7 @@ const userStore = useUserStore();
 const router = useRouter();
 const DNI = ref('')
 const password = ref('')
-const companyNIF = ref('')
-const companies = ref<Array<any>>([]);
+
 
 const showPassword = ref(false)
 const isError = ref(false)
@@ -61,7 +53,6 @@ const logIn = () => {
     const user = {
         DNI: DNI.value,
         password: password.value,
-        companyNIF: companyNIF.value
     }
     if(notEmpty()){userStore.login(user)}
     
@@ -80,15 +71,6 @@ const notEmpty = () => {
     }
 }
 
-const getCompanies = async() => {
-    companies.value = await getData('companies', '', '')
-    companyNIF.value = companies.value[0].NIF
-}
-
-
-onMounted(async () => {
-  await getCompanies();
-});
 
 </script>
 
@@ -207,6 +189,10 @@ input:focus{
     width: 30%;
 }
 
+.message{
+    text-align: center;
+    width: 70%;
+}
 
 .eye{
     cursor: pointer;
