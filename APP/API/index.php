@@ -16,29 +16,52 @@ require_once 'Validate.php';
 require_once 'Auth.php';
 
 $validate = new validate();
+$auth = new Auth();
 
 switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
 		$sql = isset($_GET['sql']) ? urldecode($_GET['sql']) : null;
+		$action = isset($_GET['accion']) ? $_GET['accion'] : null;
 		
-		if ($table == 'sql') {
-			$data = $validate->getDB(null, null, $sql);
-			$response = array(
-				'result' => 'ok',
-				'data' => $data
-			);
-		} else {
-			if($table){
-				unset($_GET['table']);
+		if($action == 'token'){
+			
+			$userToken = $auth->getBearerToken();
+			if($userToken){
+				$tokenValidated = $auth->validateToken($userToken);
+				$userValidated = $validate->get('access', ["DNI" => $tokenValidated['sub']]);
+				$response = array(
+					'result' => 'ok',
+					'data' => $userValidated[0]
+				);
 			}
-			$params = $_GET;
-			$data = $validate->get($table, $params);
-			$response = array(
-				'result' => 'ok',
-				'data' => $data
-			);
+			else{
+				$response = array(
+					'result' => 'Error',
+					'details' => 'Token no encontrado'
+				);
+			}
+			
+		}
+		else{
+			if ($table == 'sql') {
+				$data = $validate->getDB(null, null, $sql);
+				$response = array(
+					'result' => 'ok',
+					'data' => $data
+				);
+			}else {
+				if($table){
+					unset($_GET['table']);
+				}
+				$params = $_GET;
+				$data = $validate->get($table, $params);
+				$response = array(
+					'result' => 'ok',
+					'data' => $data
+				);
+			}
 		}
 		Response::result(200, $response); 
 
@@ -46,14 +69,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'POST':
 		
-		$params = json_decode(file_get_contents('php://input'), true);
+		$obParams = json_decode(file_get_contents('php://input'), true);
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
 		$action = isset($_GET['accion']) ? $_GET['accion'] : null;
 		
 			if($table){
 				unset($_GET['table']);
 			}
-			if(!isset($params)){
+			if(!isset($obParams)){
 				$response = array(
 					'result' => 'error',
 					'details' => 'Error en la solicitud'
@@ -65,13 +88,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	
 			if (isset($action) && $action == 'login') {
 				try {
-					$user = $validate->get('access', ['DNI' => $params['DNI']]);
-					if ($user && password_verify($params['password'], $user['password'])) {
-						$auth = new Auth();
-            			$token = $auth->generateToken($user['DNI']);
+					$user = $validate->get('access', ['DNI' => $obParams['DNI']]);
+					if ($user && password_verify($obParams['password'], $user[0]['Password'])) {
+            			$token = $auth->generateToken($user[0]['DNI']);
 						$response = array(
 							'result' => 'ok',
-							'data' => $user,
+							'data' => $user[0],
 							'token' => $token
 						);
 					} else {
@@ -80,7 +102,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 							'message' => 'Credenciales incorrectas'
 						);
 					}
-				} catch (\Throwable $th) {
+				} catch (Throwable $th) {
 					$response = array(
 						'result' => 'error',
 						'message' => 'No se ha podido procesar la solicitud'
