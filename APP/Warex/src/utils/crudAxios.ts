@@ -10,7 +10,7 @@ export const saveData = async (table: string, data: any)  => {
     }
 };
 
-export const loginAPI = async (userData: { DNI: string, password: string, companyNIF: string })  => {
+export const loginAPI = async (userData: { DNI: string, password: string})  => {
     try {
         const response = await axios.post(`${BASEURL}/access?accion=login`, userData);
         return response.data

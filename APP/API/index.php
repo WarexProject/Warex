@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once 'Response.php';
 require_once 'Validate.php';
+require_once 'Auth.php';
 
 $validate = new validate();
 
@@ -62,12 +63,29 @@ switch ($_SERVER['REQUEST_METHOD']) {
 				exit;
 			}
 	
-			if(isset($action) && $action == 'login'){
-				$response = array(
-					'result' => 'ok',
-					'user' => $params
-				);
-				$data = $validate->get('access', $params);
+			if (isset($action) && $action == 'login') {
+				try {
+					$user = $validate->get('access', ['DNI' => $params['DNI']]);
+					if ($user && password_verify($params['password'], $user['password'])) {
+						$auth = new Auth();
+            			$token = $auth->generateToken($user['DNI']);
+						$response = array(
+							'result' => 'ok',
+							'data' => $user,
+							'token' => $token
+						);
+					} else {
+						$response = array(
+							'result' => 'error',
+							'message' => 'Credenciales incorrectas'
+						);
+					}
+				} catch (\Throwable $th) {
+					$response = array(
+						'result' => 'error',
+						'message' => 'No se ha podido procesar la solicitud'
+					);
+				}
 			}
 			elseif(isset($action) && $action == 'signup'){
 				$params['Password'] = password_hash($params['Password'], PASSWORD_DEFAULT);
