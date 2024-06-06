@@ -1,5 +1,4 @@
 <?php
-
 header('Content-Type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
@@ -21,7 +20,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
 		$sql = isset($_GET['sql']) ? urldecode($_GET['sql']) : null;
-		
+
 		if ($table == 'sql') {
 			$data = $validate->getDB(null, null, $sql);
 			$response = array(
