@@ -2,8 +2,64 @@
 import vueClock from '@/components/ClockComp.vue';
 import {DatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
+import {ref, onMounted} from 'vue';
+import type User from '@/interfaces/user.ts';
+import {getData} from '@/utils/crudAxios'
 
-const date = new Date()
+const UserActivo: User = {
+  DNI: '02564753T',
+  Name: 'Adrian',
+  Lastname:'Leal Vacas',
+  Username: 'ADRIAN',
+  Email: 'johndoe@example.com',
+  CompanyID: 'T02564753',
+  permissions: 'READ'
+}
+
+const date = new Date();
+
+const companyName = ref();
+const warehouseTotal = ref();
+const productTotal = ref();
+
+const fetchCompanyName = async () => {
+  try {
+    const response = await getData('companies', 'NIF', UserActivo.CompanyID);
+    if (response && response.length > 0) {
+      companyName.value = response[0].CompanyName
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const fetchWarehouseNumber = async () => {
+  try {
+    const response = await getData('warehouses','CompanyID',UserActivo.CompanyID);
+    warehouseTotal.value = response
+    warehouseTotal.value  = warehouseTotal.value.length
+ 
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const fetchProductNumber = async () => {
+  try {
+    const response = await getData('products','CompanyID',UserActivo.CompanyID);
+    productTotal.value = response
+    productTotal.value  = productTotal.value.length
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+onMounted(() => {
+  fetchCompanyName();
+  fetchWarehouseNumber();
+  fetchProductNumber()
+});
+
 </script>
 
 <template>
@@ -16,8 +72,8 @@ const date = new Date()
         <font-awesome-icon icon="user" class="userDataIcon"/>
         <hr>
         <div class="userData">
-          <p class="userName">Mario Martín</p>
-          <p class="companyName">Mercanza S.L</p>
+          <p class="userName">{{ UserActivo.Username }}</p>
+          <p class="companyName">{{ companyName }}</p>
         </div>
       </div>
     </div>
@@ -31,25 +87,19 @@ const date = new Date()
         <div class="info-item">
           <font-awesome-icon icon="building" class="buildingIcon infoItemIcon"/>
           <h2><strong>Tu empresa</strong></h2>
-          <h3 style="color: green">Empresa 1</h3>
+          <h3 style="color: green">{{ companyName }}</h3>
         </div>
         <hr>
         <div class="info-item">
           <font-awesome-icon icon="warehouse" class="warehouseIcon infoItemIcon"/>
           <h2><strong>Almacenes registrados</strong></h2>
-          <h3 style="color: green">5 almacenes</h3>
+          <h3 style="color: green">{{ warehouseTotal }} almacenes</h3>
         </div>
         <hr>
         <div class="info-item">
           <font-awesome-icon icon="box" class="boxIcon infoItemIcon"/>
           <h2><strong>Productos almacenados</strong></h2>
-          <h3 style="color: green">1.200 productos</h3>
-        </div>
-        <hr>
-        <div class="info-item">
-          <font-awesome-icon icon="box" class="boxIcon infoItemIcon"/>
-          <h2><strong>Productos almacenados</strong></h2>
-          <h3 style="color: green">1.200 productos</h3>
+          <h3 style="color: green">{{ productTotal }} productos</h3>
         </div>
       </div>
     </div>
