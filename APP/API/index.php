@@ -110,9 +110,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
 				}
 			}
 			elseif(isset($action) && $action == 'signup'){
-				$params['Password'] = password_hash($params['Password'], PASSWORD_DEFAULT);
+				$obParams['Password'] = password_hash($obParams['Password'], PASSWORD_DEFAULT);
 				try {
-					$insert_id = $validate->insert($table, $params);
+					$insert_id = $validate->insert($table, $obParams);
 					$response = array(
 						'result' => 'ok',
 						'insert_id' => $insert_id
@@ -125,7 +125,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 				}
 			}
 			else{
-				$insert_id = $validate->insert($table, $params);
+				$insert_id = $validate->insert($table, $obParams);
 	
 				$response = array(
 					'result' => 'ok',

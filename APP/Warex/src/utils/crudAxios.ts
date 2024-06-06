@@ -56,9 +56,10 @@ export const updateFieldData = async (table: string, id: string, field: string, 
     }
 };
 
-export const deleteData = async (table: string, id: string) => {
+export const deleteData = async (table: string, field: string, value: string) => {
     try {
-        await axios.delete(`${BASEURL}/${table}/${id}`);
+        const response = await axios.delete(`${BASEURL}/${table}?${field}=${value}`);
+        return response.data
     } catch (error) {
         console.log(error);
     }

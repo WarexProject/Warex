@@ -5,5 +5,5 @@ export default interface Product {
     TotalProductQuantity: number;
     Description: string;
     UnitPrice: string;
-    ExpityDate: string;
+    ExpiryDate: string;
   }
