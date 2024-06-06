@@ -1,6 +1,10 @@
 <script setup lang='ts'>
 import { ref } from 'vue';
 import Modal from '@/components/ModalComp.vue';
+import { updateData } from '@/utils/crudAxios';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 
 const isModalVisible = ref(false);
 const modalType = ref('');
@@ -9,28 +13,36 @@ const newPassword = ref('');
 const email = ref('');
 const successMessage = ref('');
 
-function showModal(type: string) {
+const showModal = (type: string) => {
   modalType.value = type;
   isModalVisible.value = true;
 }
 
-function closeModal() {
+const closeModal = () => {
   isModalVisible.value = false;
   newUsername.value = '';
   newPassword.value = '';
   email.value = '';
 }
 
-function confirmChange(type: string) {
-  //lógica que no sirve para nada, simplemente es una falsa confirmación 
-  //falta por añadir la lógica para cambiar el nombre de user o password
-  if (type === 'username') {
-    successMessage.value = `Nombre de usuario cambiado a ${newUsername.value} con éxito.`;
-  } else if (type === 'password') {
-    successMessage.value = `Contraseña cambiada con éxito.`;
+const changeUserName = async () => {
+  try{
+    const response = await updateData ('access','userName', newUsername.value);
+    console.log(response)
+  } catch (e) {
+    console.log(e);
   }
-  closeModal();
 }
+
+const changePassword = async () => {
+  try{
+    const response = await updateData ('access','Password', newPassword.value);
+    console.log(response)
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 </script>
 
 
@@ -58,7 +70,7 @@ function confirmChange(type: string) {
       <Modal v-if="isModalVisible && modalType === 'username'" @close="closeModal">
         <h3 class="modal-title">CAMBIAR NOMBRE DE USUARIO</h3>
         <input v-model="newUsername" class="input-space" placeholder="Nuevo nombre de usuario" />
-        <button @click="confirmChange('username')" class="confirm-button">Confirmar</button>
+        <button @click="changeUserName()" class="confirm-button">Confirmar</button>
         <button @click="closeModal" class="exit-button">Cancelar</button>
       </Modal>
   
@@ -66,7 +78,7 @@ function confirmChange(type: string) {
       <Modal v-if="isModalVisible && modalType === 'password'" @close="closeModal">
         <h3 class="modal-title">CAMBIAR CONTRASEÑA</h3>
         <input v-model="newPassword" type="password" class="input-space" placeholder="Nueva contraseña" />
-        <button @click="confirmChange('password')" class="confirm-button">Confirmar</button>
+        <button @click="" class="confirm-button">Confirmar</button>
         <button @click="closeModal" class="exit-button">Cancelar</button>
       </Modal>
 

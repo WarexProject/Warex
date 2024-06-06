@@ -7,7 +7,7 @@
               </div>
               <div class="userMenu">
                   <RouterLink to="/user" class="userMenuItem">Mi Perfil</RouterLink>
-                  <RouterLink to="/admin" class="userMenuItem" v-if="userStore.user?.permissions == 'ALL'">Admin</RouterLink>
+                  <RouterLink to="/admin" class="userMenuItem" v-if="userStore.user?.Permissions === 'ALL'">Admin</RouterLink>
                   <button @click="logout" class="userMenuBtn">Cerrar sesión</button>
               </div>
           </div>
@@ -39,7 +39,6 @@ import { RouterLink, useRouter } from 'vue-router'
 
 const userStore = useUserStore()
 const router = useRouter();
-
 const menu = [ 
 {route : '/', name: 'Inicio', icon: 'home'},
 {route : '/data', name: 'Datos', icon: 'database'}, 

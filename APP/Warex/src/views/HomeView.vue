@@ -4,17 +4,10 @@ import {DatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
 import {ref, onMounted} from 'vue';
 import type User from '@/interfaces/user.ts';
-import {getData} from '@/utils/crudAxios'
+import {getData} from '@/utils/crudAxios';
+import {useUserStore} from '@/stores/userStore'
 
-const UserActivo: User = {
-  DNI: '02564753T',
-  Name: 'Adrian',
-  Lastname:'Leal Vacas',
-  Username: 'ADRIAN',
-  Email: 'johndoe@example.com',
-  CompanyID: 'T02564753',
-  permissions: 'READ'
-}
+const userStore = useUserStore();
 
 const date = new Date();
 
@@ -24,7 +17,7 @@ const productTotal = ref();
 
 const fetchCompanyName = async () => {
   try {
-    const response = await getData('companies', 'NIF', UserActivo.CompanyID);
+    const response = await getData('companies', 'NIF', userStore.user.CompanyID);
     if (response && response.length > 0) {
       companyName.value = response[0].CompanyName
     }
@@ -35,7 +28,7 @@ const fetchCompanyName = async () => {
 
 const fetchWarehouseNumber = async () => {
   try {
-    const response = await getData('warehouses','CompanyID',UserActivo.CompanyID);
+    const response = await getData('warehouses','CompanyID',userStore.user.CompanyID);
     warehouseTotal.value = response
     warehouseTotal.value  = warehouseTotal.value.length
  
@@ -46,7 +39,7 @@ const fetchWarehouseNumber = async () => {
 
 const fetchProductNumber = async () => {
   try {
-    const response = await getData('products','CompanyID',UserActivo.CompanyID);
+    const response = await getData('products','CompanyID',userStore.user.CompanyID);
     productTotal.value = response
     productTotal.value  = productTotal.value.length
   } catch (e) {
@@ -72,7 +65,7 @@ onMounted(() => {
         <font-awesome-icon icon="user" class="userDataIcon"/>
         <hr>
         <div class="userData">
-          <p class="userName">{{ UserActivo.Username }}</p>
+          <p class="userName">{{ userStore.user?.Name}}</p>
           <p class="companyName">{{ companyName }}</p>
         </div>
       </div>

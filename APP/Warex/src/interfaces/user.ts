@@ -1,9 +1,10 @@
 export default interface User {
     DNI: string;
     Name: string;
-    Lastname: string;
-    Username: string;
+    LastName: string;
+    UserName: string;
     Email: string;
     CompanyID: string;
-    permissions: string;
+    Permissions: string;
   }
+
