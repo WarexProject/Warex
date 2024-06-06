@@ -1,51 +1,82 @@
 <template>
   <div class="container">
     <div class="dataCont">
-      <div class="dataShow">
+      <div class="dataShow" v-if="selectedTable.ing == 'warehouses'">
         <h2 class="dataTitle">Datos de Almacén</h2>
         <div class="data">
-          <p>ID Almacén: {{ items.length }}</p>
-          <p>Cantidad total de secciones: {{ items.length }}</p>
-          <p>Cantidad total de Estanterías: {{ items.length }}</p>
-          <p>Cantidad total de productos: {{ items.length }}</p>
-          <p>Cámara Frigorífica: </p>
-          <p>Empresa: Mercanza S.L </p>
+          <p>ID Almacén: {{ selectedWarehouse?.WarehouseID }}</p>
+          <p>ID Compañía: {{ selectedWarehouse?.CompanyID }}</p>
+          <p>Cámara Frigorífica: {{ selectedWarehouse?.RefrigeratingChamber }}</p>
+        </div>
+      </div>
+      <div class="dataShow" v-else-if="selectedTable.ing == 'products'">
+        <h2 class="dataTitle">Datos de Producto</h2>
+        <div class="data">
+          <p>ID Producto: {{ selectedProduct?.ProductID }}</p>
+          <p>ID Compañía: {{ selectedProduct?.CompanyID }}</p>
+          <p>Nombre de Producto: {{ selectedProduct?.ProductName }}</p>
+          <p>Descripción: {{ selectedProduct?.Description }}</p>
+          <p>Cantidad Total: {{ selectedProduct?.TotalProductQuantity }}</p>
+          <p>Precion Unitario: {{ selectedProduct?.UnitPrice }}</p>
+          <p>Fecha de Expiración: {{ selectedProduct?.ExpiryDate }}</p>
+        </div>
+      </div>
+      <div class="dataShow" v-else-if="selectedTable.ing == 'section'">
+        <h2 class="dataTitle">Datos de Sección</h2>
+        <div class="data">
+          <p>ID Sección: {{ selectedSection?.SectionID }}</p>
+          <p>ID Almacén: {{ selectedSection?.WarehouseID }}</p>
+          <p>Nombre de Sección: {{ selectedSection?.SectionName }}</p>
+        </div>
+      </div>
+      <div class="dataShow" v-else-if="selectedTable.ing == 'shelf'">
+        <h2 class="dataTitle">Datos de Estantería</h2>
+        <div class="data">
+          <p>ID Estantería: {{ selectedShelf?.ShelfID }}</p>
+          <p>ID Sección: {{ selectedShelf?.SectionID }}</p>
+          <p>Nombre de Estantería: {{ selectedShelf?.ShelfName }}</p>
         </div>
       </div>
       <div class="buttonCont">
-        <div class="deleteBtn" v-if="!isEditing" @click="clickEdit"> Modificar Elemento</div>
-        <div class="deleteBtn" v-if="!isEditing" @click="clickAceptEdit">Eliminar elemento</div>
-        <div class="deleteBtn" v-if="isEditing" @click="clickDeleteSingleItem">Guardar Cambios</div>
+        <div class="deleteBtn" v-if="!isEditing" @click="clickEdit">Modificar Elemento</div>
+        <div class="deleteBtn" v-if="!isEditing" @click="clickDeleteSingleItem">Eliminar elemento</div>
+        <div class="deleteBtn" v-if="isEditing" @click="clickAceptEdit">Guardar Cambios</div>
         <div class="deleteBtn" v-if="isEditing" @click="clickCancelEdit">Cancelar</div>
       </div>
     </div>
     <div class="tableCont">
       <div class="tableHeader">
         <div class="selector">
-          <select v-model="selectedTable" >
+          <select v-model="selectedTable">
             <option v-for="(elm, indx) in tables" :key="indx" :value="elm">
               {{ elm.esp }}
             </option>
           </select>
         </div>
         <div class="filter">
-          <select v-model="searchField" >
+          <select v-model="searchField">
             <option value="" disabled>Filtrar por</option>
             <option v-for="(elm, indx) in headers" :key="indx" :value="elm.value">
               {{ elm.text }}
             </option>
           </select>
-          <input type="text" class="filterText" placeholder="Introduzca el valor a buscar " v-model="searchText" >
-          <div class="searchButton" @click="clickSearch" >
-            <font-awesome-icon icon="magnifying-glass"/>
+          <input
+            type="text"
+            class="filterText"
+            placeholder="Introduzca el valor a buscar "
+            v-model="searchText"
+          />
+          <div class="searchButton" @click="clickSearch">
+            <font-awesome-icon icon="magnifying-glass" />
           </div>
         </div>
-        <div class="resetFilter"  >
-            <font-awesome-icon icon="rotate-left" class="resetIcon" @click="resetFilter" />
-          </div>
+        <div class="resetFilter">
+          <font-awesome-icon icon="rotate-left" class="resetIcon" @click="resetFilter" />
+        </div>
       </div>
-      
-      <EasyDataTable class="table"
+
+      <EasyDataTable
+        class="table"
         v-model:items-selected="itemsSelected"
         table-class-name="customize-table"
         :headers="headers"
@@ -55,10 +86,10 @@
         :searchField="searchField"
         :searchValue="searchValue"
         :tableHeight="460"
-        @clickRow="showRow"
+        @clickRow="clickRow"
       />
       <div class="buttons">
-        <div class="deleteBtn" v-if="itemsSelected.length > 0"  @click="deleteItems">
+        <div class="deleteBtn" v-if="itemsSelected.length > 0" @click="deleteItems">
           Eliminar seleccionados: {{ itemsSelected.length }}
         </div>
       </div>
@@ -66,107 +97,70 @@
   </div>
 </template>
 
-<script setup lang='ts'>
-import { ref, onMounted, watch } from 'vue';
-import type { Header, Item, ClickRowArgument  } from "vue3-easy-data-table";
-import { getData } from '@/utils/crudAxios';
-import type Table from '@/interfaces/table';
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
+import type { Header, Item, ClickRowArgument } from 'vue3-easy-data-table'
+import { deleteData, getData } from '@/utils/crudAxios'
+import type Table from '@/interfaces/table'
+import { useUserStore } from '@/stores/userStore'
+import type Warehouse from '@/interfaces/warehouse'
+import type Product from '@/interfaces/product'
+import type Section from '@/interfaces/section'
+import type Shelf from '@/interfaces/shelf'
 
 //
 
-const tables = ref<Table[]>([ 
-  { esp: 'Almacenes' , ing: 'warehouses', icon: '' },
-  { esp: 'Productos' , ing: 'products', icon: '' },
-  { esp: 'Secciones' , ing: 'sections', icon: '' },
-  { esp: 'Estanterías' , ing: 'shelf', icon: '' },
-  { esp: 'Almacenes' , ing: 'Warehouses', icon: '' },
+const userStore = useUserStore()
+
+const tables = ref<Table[]>([
+  { esp: 'Almacenes', ing: 'warehouses', icon: '' },
+  { esp: 'Productos', ing: 'products', icon: '' },
+  { esp: 'Secciones', ing: 'section', icon: '' },
+  { esp: 'Estanterías', ing: 'shelf', icon: '' }
 ])
-const headers = ref<Header[]>([ //TENDRÉ QUE HACER UN DICCIONARIO PARA CADA TABLA. POR EL CASO EN EL QUE ME TRAIGA UN ARRAY VACIO
-  { text: "Jugador", value: "player", },
-  { text: "Equipo", value: "team"},
-  { text: "Número", value: "number"},
-  { text: "Posición", value: "position"},
-  { text: "Altura", value: "indicator.height"},
-  { text: "Peso (lbs)", value: "indicator.weight", sortable: true},
-  { text: "Úiltimo equipo", value: "lastAttended", width: 200},
-  { text: "País", value: "country"},
-]);
+const headers = ref<Header[]>([])
 
-const headersWarehouses: Header[] = [ 
-  { text: "Hola", value: "player", },
-  { text: "CosaPrueba", value: "team"},
-  { text: "Probando", value: "number"},
-  { text: "Josito", value: "position"},
-];
-const headersProducts: Header[] = [ 
-  { text: "Hola", value: "player", },
-  { text: "CosaPrueba", value: "team"},
-  { text: "Probando", value: "number"},
-  { text: "Josito", value: "position"},
-];
-const headersSections: Header[] = [ 
-  { text: "Hola", value: "player", },
-  { text: "CosaPrueba", value: "team"},
-  { text: "Probando", value: "number"},
-  { text: "Josito", value: "position"},
-];
-const headersShelf: Header[] = [ 
-  { text: "Hola", value: "player", },
-  { text: "CosaPrueba", value: "team"},
-  { text: "Probando", value: "number"},
-  { text: "Josito", value: "position"},
-];
+const headersWarehouses: Header[] = [
+  { text: 'ID Almacén', value: 'WarehouseID' },
+  { text: 'ID Compañía', value: 'CompanyID' },
+  { text: 'Cámara frigorífica', value: 'RefrigeratingChamber' }
+]
+const headersProducts: Header[] = [
+  { text: 'ID Producto', value: 'ProductID' },
+  { text: 'Producto', value: 'ProductName' },
+  { text: 'Descripción', value: 'Description' },
+  { text: 'Precio Unitario', value: 'UnitPrice' },
+  { text: 'Fecha Expración', value: 'ExpiryDate' }
+]
+const headersSections: Header[] = [
+  { text: 'ID Sección', value: 'SectionID' },
+  { text: 'ID Almacén', value: 'WarehouseID' },
+  { text: 'Sección', value: 'SectionName' }
+]
+const headersShelf: Header[] = [
+  { text: 'ID Estantería', value: 'ShelfID' },
+  { text: 'ID Sección', value: 'SectionID' },
+  { text: 'Estantería', value: 'ShelfName' }
+]
 
-const items = ref<Item[]>([
-  { player: "Stephen Curry", team: "GSW", number: 30, position: 'G', indicator: {"height": '6-2', "weight": 185}, lastAttended: "Davidson", country: "USA"},
-  { player: "LeBron James", team: "LAL", number: 6, position: 'F', indicator: {"height": '6-9', "weight": 250}, lastAttended: "St. Vincent-St. Mary HS (OH)", country: "USA"},
-  { player: "Kevin Durant", team: "BKN", number: 7, position: 'F', indicator: {"height": '6-10', "weight": 240}, lastAttended: "Texas-Austin", country: "USA"},
-  { player: "Giannis Antetokounmpo", team: "MIL", number: 34, position: 'F', indicator: {"height": '6-11', "weight": 242}, lastAttended: "Filathlitikos", country: "Greece"},
-  { player: "James Harden", team: "PHI", number: 1, position: 'G', indicator: {"height": '6-5', "weight": 220}, lastAttended: "Arizona State", country: "USA"},
-  { player: "Luka Dončić", team: "DAL", number: 77, position: 'G', indicator: {"height": '6-7', "weight": 230}, lastAttended: "Real Madrid", country: "Slovenia"},
-  { player: "Kawhi Leonard", team: "LAC", number: 2, position: 'F', indicator: {"height": '6-7', "weight": 225}, lastAttended: "San Diego State", country: "USA"},
-  { player: "Damian Lillard", team: "POR", number: 0, position: 'G', indicator: {"height": '6-2', "weight": 195}, lastAttended: "Weber State", country: "USA"},
-  { player: "Anthony Davis", team: "LAL", number: 3, position: 'F-C', indicator: {"height": '6-10', "weight": 253}, lastAttended: "Kentucky", country: "USA"},
-  { player: "Jayson Tatum", team: "BOS", number: 0, position: 'F', indicator: {"height": '6-8', "weight": 210}, lastAttended: "Duke", country: "USA"},
-  { player: "Joel Embiid", team: "PHI", number: 21, position: 'C', indicator: {"height": '7-0', "weight": 280}, lastAttended: "Kansas", country: "Cameroon"},
-  { player: "Nikola Jokić", team: "DEN", number: 15, position: 'C', indicator: {"height": '6-11', "weight": 284}, lastAttended: "Mega Basket", country: "Serbia"},
-  { player: "Kyrie Irving", team: "DAL", number: 11, position: 'G', indicator: {"height": '6-2', "weight": 195}, lastAttended: "Duke", country: "USA"},
-  { player: "Chris Paul", team: "GSW", number: 3, position: 'G', indicator: {"height": '6-0', "weight": 175}, lastAttended: "Wake Forest", country: "USA"},
-  { player: "Russell Westbrook", team: "LAC", number: 0, position: 'G', indicator: {"height": '6-3', "weight": 200}, lastAttended: "UCLA", country: "USA"},
-  { player: "Jimmy Butler", team: "MIA", number: 22, position: 'F', indicator: {"height": '6-7', "weight": 230}, lastAttended: "Marquette", country: "USA"},
-  { player: "Devin Booker", team: "PHX", number: 1, position: 'G', indicator: {"height": '6-5', "weight": 206}, lastAttended: "Kentucky", country: "USA"},
-  { player: "Trae Young", team: "ATL", number: 11, position: 'G', indicator: {"height": '6-1', "weight": 180}, lastAttended: "Oklahoma", country: "USA"},
-  { player: "Donovan Mitchell", team: "CLE", number: 45, position: 'G', indicator: {"height": '6-1', "weight": 215}, lastAttended: "Louisville", country: "USA"},
-  { player: "Paul George", team: "LAC", number: 13, position: 'F', indicator: {"height": '6-8', "weight": 220}, lastAttended: "Fresno State", country: "USA"},
-  { player: "Klay Thompson", team: "GSW", number: 11, position: 'G', indicator: {"height": '6-6', "weight": 215}, lastAttended: "Washington State", country: "USA"},
-  { player: "Karl-Anthony Towns", team: "MIN", number: 32, position: 'C', indicator: {"height": '7-0', "weight": 248}, lastAttended: "Kentucky", country: "USA"},
-  { player: "Bradley Beal", team: "PHX", number: 3, position: 'G', indicator: {"height": '6-4', "weight": 207}, lastAttended: "Florida", country: "USA"},
-  { player: "Zion Williamson", team: "NOP", number: 1, position: 'F', indicator: {"height": '6-6', "weight": 284}, lastAttended: "Duke", country: "USA"},
-  { player: "Brandon Ingram", team: "NOP", number: 14, position: 'F', indicator: {"height": '6-8', "weight": 190}, lastAttended: "Duke", country: "USA"},
-  { player: "Rudy Gobert", team: "MIN", number: 27, position: 'C', indicator: {"height": '7-1', "weight": 258}, lastAttended: "Cholet", country: "France"},
-  { player: "Jrue Holiday", team: "BOS", number: 21, position: 'G', indicator: {"height": '6-5', "weight": 205}, lastAttended: "UCLA", country: "USA"},
-  { player: "Bam Adebayo", team: "MIA", number: 13, position: 'C', indicator: {"height": '6-9', "weight": 255}, lastAttended: "Kentucky", country: "USA"},
-  { player: "Ja Morant", team: "MEM", number: 12, position: 'G', indicator: {"height": '6-3', "weight": 174}, lastAttended: "Murray State", country: "USA"},
-  { player: "Jaylen Brown", team: "BOS", number: 7, position: 'F', indicator: {"height": '6-6', "weight": 223}, lastAttended: "California", country: "USA"},
-  { player: "Zach LaVine", team: "CHI", number: 8, position: 'G', indicator: {"height": '6-5', "weight": 200}, lastAttended: "UCLA", country: "USA"},
-  { player: "De'Aaron Fox", team: "SAC", number: 5, position: 'G', indicator: {"height": '6-3', "weight": 185}, lastAttended: "Kentucky", country: "USA"},
-  { player: "Pascal Siakam", team: "TOR", number: 43, position: 'F', indicator: {"height": '6-9', "weight": 230}, lastAttended: "New Mexico State", country: "Cameroon"},
-  { player: "Shai Gilgeous-Alexander", team: "OKC", number: 2, position: 'G', indicator: {"height": '6-6', "weight": 180}, lastAttended: "Kentucky", country: "Canada"}
-]);
+const items = ref<Item[]>([])
 
 const rowsPerPage = 8
-const itemsSelected = ref<Item[]>([]);
+const itemsSelected = ref<Item[]>([])
 const isLoading = ref(true)
 
-const selectedTable = ref<Table>(tables.value[0]);
+const selectedTable = ref<Table>(tables.value[0])
 const searchField = ref('')
 const searchValue = ref('')
 const searchText = ref('')
 
 const isEditing = ref(false)
 
-
-
+//Objeto a mostrar en la izquierda
+const selectedWarehouse = ref<Warehouse | undefined | Item>()
+const selectedProduct = ref<Product | undefined>()
+const selectedSection = ref<Section | undefined>()
+const selectedShelf = ref<Shelf | undefined>()
 
 const clickSearch = () => {
   searchValue.value = searchText.value
@@ -177,70 +171,108 @@ const resetFilter = () => {
   searchField.value = ''
 }
 
-const showRow = (item: ClickRowArgument) => {
-  console.log(item);
-};
+const clickRow = (item: ClickRowArgument) => {
+  switch (selectedTable.value.ing) {
+    case 'warehouses':
+      selectedWarehouse.value = item
+      break
+    case 'products':
+      selectedProduct.value = item
+      break
+    case 'section':
+      selectedSection.value = item
+      break
+    case 'shelf':
+      selectedShelf.value = item
+      break
 
-//FUNCION QUE CARGA EL ARRAY DE COLUMNAS Y LOS DATOS
-const getItems = () => {
-  changeHeaders()
+    default:
+      break
+  }
 }
 
-const changeHeaders = () => {
+//FUNCION QUE CARGA EL ARRAY DE COLUMNAS Y LOS DATOS
+
+const getItems = async () => {
   switch (selectedTable.value.ing) {
     case 'warehouses':
       headers.value = headersWarehouses
-      break;
+      items.value = await getData('warehouses', 'CompanyID', userStore.user.CompanyID)
+      selectedWarehouse.value = items.value[0]
+      break
     case 'products':
       headers.value = headersProducts
-      break;
-    case 'sections':
+      items.value = await getData('products', 'CompanyID', userStore.user.CompanyID)
+      selectedProduct.value = items.value[0]
+      break
+    case 'section':
       headers.value = headersSections
-      break;
+      items.value = await getData('section', '', '') //HAY QUE HACER CONSULTA COMPLEJA PARA TRAER SOLO LOS DE LOS ALMACENES DE NUESTRA COMPANY
+      selectedSection.value = items.value[0]
+      break
     case 'shelf':
       headers.value = headersShelf
-      break;
-  
+      items.value = await getData('shelf', '', '')
+      selectedShelf.value = items.value[0]
+      break
+
     default:
-      break;
+      break
   }
 }
 
 const deleteItems = () => {
-  items.value = items.value.filter(item => 
-    !itemsSelected.value.some(selectedItem => selectedItem.player === item.player)
-  );
-  itemsSelected.value = []; // Limpiar la selección después de borrar
-};
+  items.value = items.value.filter(
+    (item) => !itemsSelected.value.some((selectedItem) => selectedItem.player === item.player)
+  )
+  itemsSelected.value = [] // Limpiar la selección después de borrar
+}
 
 watch(selectedTable, (newValue, oldValue) => {
   isLoading.value = true
   setTimeout(() => {
     getItems()
-    isLoading.value = false;
-  }, 2000);
-});
+    resetFilter()
+    isLoading.value = false
+  }, 2000)
+})
 
 onMounted(() => {
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 2000);
-});
-
+  setTimeout(async () => {
+    getItems()
+    isLoading.value = false
+  }, 2000)
+})
 
 //EDITAR Y MODIFICAR UN ELEMENTO
 const clickEdit = () => {
   isEditing.value = true
 }
-const clickDeleteSingleItem = () => {
+const clickDeleteSingleItem = async () => {
+  let deleted
+  switch (selectedTable.value.ing) {
+    case 'warehouses':
+      deleted = await deleteData('warehouses', 'WarehouseID', selectedWarehouse.value?.WarehouseID)
+      break
+    case 'products':
+      deleted = await deleteData('products', 'ProductID', selectedProduct.value?.ProductID)
+      break
+    case 'section':
+      deleted = await deleteData('section', 'SectionID', selectedSection.value?.SectionID)
+      break
+    case 'shelf':
+      deleted = await deleteData('shelf', 'ShelfID', selectedShelf.value?.ShelfID)
+      break
+    default:
+      break
+  }
+  getItems()
+  resetFilter()
 }
-const clickAceptEdit = () => {
-}
+const clickAceptEdit = () => {}
 const clickCancelEdit = () => {
   isEditing.value = false
 }
-
-
 </script>
 
 <style scoped>
@@ -252,7 +284,7 @@ const clickCancelEdit = () => {
   gap: 30px;
 }
 
-.dataCont{
+.dataCont {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -260,37 +292,38 @@ const clickCancelEdit = () => {
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   width: 20%;
+  gap: 20px;
 }
 
-.dataShow{
+.dataShow {
   display: flex;
   flex-direction: column;
   gap: 10px;
   height: 70%;
 }
 
-.dataTitle{
+.dataTitle {
   text-align: center;
 }
 
-.data{
+.data {
   display: flex;
   flex-direction: column;
   width: 100%;
   padding-left: 20px;
 }
 
-.buttonCont{
+.buttonCont {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
   width: 100%;
   height: 30%;
   gap: 20px;
 }
 
-.tableCont{
+.tableCont {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -301,21 +334,21 @@ const clickCancelEdit = () => {
   width: 70%;
 }
 
-.tableHeader{
+.tableHeader {
   display: flex;
   align-items: center;
   width: 100%;
   height: 50px;
 }
 
-.selector{
+.selector {
   width: 30%;
   height: 100%;
   padding-right: 5px;
-  background-color: #2d3a4f ;
+  background-color: #2d3a4f;
   border-radius: 5px;
 }
-.selector select{
+.selector select {
   border: none;
   width: 100%;
   height: 100%;
@@ -326,24 +359,23 @@ const clickCancelEdit = () => {
   border-radius: 5px;
   cursor: pointer;
   border-left: 7px solid var(--color-green-light);
-  
 }
 
-.selector select:focus{
+.selector select:focus {
   outline-style: none;
 }
 
-.filter{
+.filter {
   display: flex;
   width: 55%;
   height: 100%;
-  background-color: #2d3a4f ;
+  background-color: #2d3a4f;
   border-radius: 5px;
   gap: 5px;
   margin-left: 10%;
 }
 
-.filter select{
+.filter select {
   border: none;
   width: 30%;
   height: 100%;
@@ -354,27 +386,26 @@ const clickCancelEdit = () => {
   border-radius: 5px;
   cursor: pointer;
   border-left: 7px solid var(--color-green-light);
-  
 }
 
-.filter select:focus{
+.filter select:focus {
   outline-style: none;
 }
 
-.filterText{
-    width: 62%;
-    border:none;
-    border-left: 2px solid #fff;
-    background-color: #2d3a4f;
-    color: #fff; 
-    font-size: large;
-    padding-left: 10px;
+.filterText {
+  width: 62%;
+  border: none;
+  border-left: 2px solid #fff;
+  background-color: #2d3a4f;
+  color: #fff;
+  font-size: large;
+  padding-left: 10px;
 }
-.filterText:focus{
-    outline-style: none;
+.filterText:focus {
+  outline-style: none;
 }
 
-.searchButton{
+.searchButton {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -384,14 +415,14 @@ const clickCancelEdit = () => {
   background-color: var(--color-green-light);
   border-radius: 0px 5px 5px 0px;
   cursor: pointer;
-  transition: background-color 0.3s ease; 
+  transition: background-color 0.3s ease;
 }
 
-.searchButton:hover{
+.searchButton:hover {
   background-color: var(--color-orange);
 }
 
-.resetFilter{
+.resetFilter {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -400,16 +431,15 @@ const clickCancelEdit = () => {
   color: #000;
 }
 
-.resetIcon{
+.resetIcon {
   cursor: pointer;
 }
 
-.table{
+.table {
   width: 100%;
 }
 
 .customize-table {
-  
   --easy-table-header-font-size: 17px;
   --easy-table-header-height: 50px;
   --easy-table-header-font-color: #fff;
@@ -439,23 +469,22 @@ const clickCancelEdit = () => {
   --easy-table-rows-per-page-selector-option-padding: 10px;
   --easy-table-rows-per-page-selector-z-index: 1;
 
-
   --easy-table-scrollbar-track-color: #2d3a4f;
   --easy-table-scrollbar-color: #2d3a4f;
-  --easy-table-scrollbar-thumb-color: #4c5d7a;;
+  --easy-table-scrollbar-thumb-color: #4c5d7a;
   --easy-table-scrollbar-corner-color: #2d3a4f;
 
   --easy-table-loading-mask-background-color: #2d3a4f;
   --easy-table-loading-mask-opacity: 0.8;
 }
 
-.buttons{
+.buttons {
   display: flex;
   width: 100%;
   height: 30px;
 }
 
-.deleteBtn{
+.deleteBtn {
   display: flex;
   align-items: center;
   justify-content: center;

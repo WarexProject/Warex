@@ -65,7 +65,7 @@ onMounted(() => {
         <font-awesome-icon icon="user" class="userDataIcon"/>
         <hr>
         <div class="userData">
-          <p class="userName">{{ userStore.user?.Name}}</p>
+          <p class="userName">{{ userStore.user?.Name + ' '+ userStore.user?.LastName}}</p>
           <p class="companyName">{{ companyName }}</p>
         </div>
       </div>
