@@ -149,7 +149,7 @@ alert("Nuevo usuario insertado con éxito.")
 
 
 const deleteUser = async () => {
-  await deleteData ('access',deletedUserDNI.value,'DNI')
+  await deleteData ('access','DNI', deletedUserDNI.value)
   alert("Usuario eliminado con éxito.")
 }
 

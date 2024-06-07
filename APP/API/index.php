@@ -23,35 +23,32 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
 		$sql = isset($_GET['sql']) ? urldecode($_GET['sql']) : null;
 		$action = isset($_GET['accion']) ? $_GET['accion'] : null;
-		
-		if($action == 'token'){
-			
+
+		if ($action == 'token') {
+
 			$userToken = $auth->getBearerToken();
-			if($userToken){
+			if ($userToken) {
 				$tokenValidated = $auth->validateToken($userToken);
 				$userValidated = $validate->get('access', ["DNI" => $tokenValidated['sub']]);
 				$response = array(
 					'result' => 'ok',
 					'data' => $userValidated[0]
 				);
-			}
-			else{
+			} else {
 				$response = array(
 					'result' => 'Error',
 					'details' => 'Token no encontrado'
 				);
 			}
-			
-		}
-		else{
+		} else {
 			if ($table == 'sql') {
 				$data = $validate->getDB(null, null, $sql);
 				$response = array(
 					'result' => 'ok',
 					'data' => $data
 				);
-			}else {
-				if($table){
+			} else {
+				if ($table) {
 					unset($_GET['table']);
 				}
 				$params = $_GET;
@@ -62,138 +59,119 @@ switch ($_SERVER['REQUEST_METHOD']) {
 				);
 			}
 		}
-		Response::result(200, $response); 
+		Response::result(200, $response);
 
 		break;
 
 	case 'POST':
-		
+
 		$obParams = json_decode(file_get_contents('php://input'), true);
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
 		$action = isset($_GET['accion']) ? $_GET['accion'] : null;
-		
-			if($table){
-				unset($_GET['table']);
-			}
-			if(!isset($obParams)){
-				$response = array(
-					'result' => 'error',
-					'details' => 'Error en la solicitud'
-				);
-	
-				Response::result(400, $response);
-				exit;
-			}
-	
-			if (isset($action) && $action == 'login') {
-				try {
-					$user = $validate->get('access', ['DNI' => $obParams['DNI']]);
-					if ($user && password_verify($obParams['password'], $user[0]['Password'])) {
-            			$token = $auth->generateToken($user[0]['DNI']);
-						$response = array(
-							'result' => 'ok',
-							'data' => $user[0],
-							'token' => $token
-						);
-					} else {
-						$response = array(
-							'result' => 'error',
-							'message' => 'Credenciales incorrectas'
-						);
-					}
-				} catch (Throwable $th) {
-					$response = array(
-						'result' => 'error',
-						'message' => 'No se ha podido procesar la solicitud'
-					);
-				}
-			}
-			elseif(isset($action) && $action == 'signup'){
-				$obParams['Password'] = password_hash($obParams['Password'], PASSWORD_DEFAULT);
-				try {
-					$insert_id = $validate->insert($table, $obParams);
+
+		if ($table) {
+			unset($_GET['table']);
+		}
+		if (!isset($obParams)) {
+			$response = array(
+				'result' => 'error',
+				'details' => 'Error en la solicitud'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if (isset($action) && $action == 'login') {
+			try {
+				$user = $validate->get('access', ['DNI' => $obParams['DNI']]);
+				if ($user && password_verify($obParams['password'], $user[0]['Password'])) {
+					$token = $auth->generateToken($user[0]['DNI']);
 					$response = array(
 						'result' => 'ok',
-						'insert_id' => $insert_id
+						'data' => $user[0],
+						'token' => $token
 					);
-				} catch (\Throwable $th) {
+				} else {
 					$response = array(
 						'result' => 'error',
-						'Error' => 'No se ha podido insertar el usuario'
+						'message' => 'Credenciales incorrectas'
 					);
 				}
+			} catch (Throwable $th) {
+				$response = array(
+					'result' => 'error',
+					'message' => 'No se ha podido procesar la solicitud'
+				);
 			}
-			else{
+		} elseif (isset($action) && $action == 'signup') {
+			$obParams['Password'] = password_hash($obParams['Password'], PASSWORD_DEFAULT);
+			try {
 				$insert_id = $validate->insert($table, $obParams);
-	
 				$response = array(
 					'result' => 'ok',
 					'insert_id' => $insert_id
 				);
+			} catch (\Throwable $th) {
+				$response = array(
+					'result' => 'error',
+					'Error' => 'No se ha podido insertar el usuario'
+				);
 			}
-		
+		} else {
+			$insert_id = $validate->insert($table, $obParams);
+
+			$response = array(
+				'result' => 'ok',
+				'insert_id' => $insert_id
+			);
+		}
+
 		Response::result(201, $response);
 
 
 		break;
 
-		case 'PUT':
+	case 'PUT':
+		$data = json_decode(file_get_contents('php://input'), true);
+		$table = isset($_GET['table']) ? $_GET['table'] : null;
+		$action = isset($_GET['accion']) ? $_GET['accion'] : null;
 
-			$data = json_decode(file_get_contents('php://input'), true);
-			$table = isset($_GET['table']) ? $_GET['table'] : null;
-			if($table){
-				unset($_GET['table']);
+		if ($table) {
+			unset($_GET['table']);
+		}
+		if ($action && $action == 'changePasswd') {
+			if (isset($data['Password'])) {
+				$data['Password'] = password_hash($data['Password'], PASSWORD_DEFAULT);
+			} else {
+				$response = array(
+					'result' => 'error',
+					'details' => 'Password no proporcionada'
+				);
+				Response::result(400, $response);
+				exit();
 			}
-			$params = $_GET;
-			$affectedRows =  $validate->update($table, $params, $data);
-			$response = array(
-				'result' => 'ok',
-				'filas afectadas' => $affectedRows
-			);
-			Response::result(200, $response);
-	
-			break;
-	
-		//FUNCIONA TODO MENOS HASHEAR LA CONTRASEÑA CUANDO SE LE CAMBIA A UN USUARIO EXISTENTE
-		// case 'PUT':
-		// 	$data = json_decode(file_get_contents('php://input'), true);
-		// 	$table = isset($_GET['table']) ? $_GET['table'] : null;
-		// 	$action = isset($_GET['accion']) ? $_GET['accion'] : null;
-	
-		// 	if ($table) {
-		// 		unset($_GET['table']);
-		// 	}
-		// 	if ($action && $action == 'changePasswd') {
-		// 		if (isset($data['Password'])) {
-		// 			$data['Password'] = password_hash($data['Password'], PASSWORD_DEFAULT);
-		// 		} else {
-		// 			$response = array(
-		// 				'result' => 'error',
-		// 				'details' => 'Password no proporcionada'
-		// 			);
-		// 			Response::result(400, $response);
-		// 			exit();
-		// 		}
-		// 	}
+			unset($_GET['accion']);
+		}
 
-		// 	$params = $_GET;
-		// 	$affectedRows = $validate->update($table, $params, $data);
-		// 	$response = array(
-		// 		'result' => 'ok',
-		// 		'filas afectadas' => $affectedRows
-		// 	);
-		// 	Response::result(200, $response);
-			
-		// 	break;
+		$params = $_GET;
+		$affectedRows = $validate->update($table, $params, $data);
+		$response = array(
+			'result' => 'ok',
+			'filas afectadas' => $affectedRows
+		);
+		Response::result(200, $response);
 
-	case 'DELETE': 
+		break;
+
+	case 'DELETE':
 
 		$table = isset($_GET['table']) ? $_GET['table'] : null;
-		if($table){
+		if ($table) {
 			unset($_GET['table']);
 		}
 		$params = $_GET;
-		
+
 		$validate->delete($table, $params);
 		$response = array(
 			'result' => 'ok'
@@ -209,4 +187,3 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		break;
 }
-?>
