@@ -231,7 +231,9 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { getData, saveData } from '@/utils/crudAxios'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const selectedOption = ref('WAREHOUSES')
 let selectedOptionSECTION = ref('Selecciona un WAREHOUSES')
 let selectedOptionSHELF = ref('Selecciona un SECTION')
@@ -314,11 +316,12 @@ const guardarEstanteria = async () => {
   await saveData('location', $locationSHELF)
   console.log($locationSHELF)
   alert('Pruducto almacenado correctamente en la estantería')
+  cantidadProduct.value = ''
 }
 
 const llamadaSECTION = async () => {
   //console.log(selectedOptionSECTION.value)
-  const respuesta = await getData('warehouses', 'CompanyID', 'T02564753')
+  const respuesta = await getData('warehouses', 'CompanyID', userStore.user.CompanyID)
   warehouses.value = respuesta
   console.log(warehouses.value)
 }
@@ -349,7 +352,7 @@ const llamadaLOCATION_SHELF = async (opcion: any) => {
 
 const llamadaPRODUCTS = async () => {
   //console.log(selectedOptionSECTION.value)
-  const respuesta = await getData('products', 'CompanyID', 'T02564753')
+  const respuesta = await getData('products', 'CompanyID', userStore.user.CompanyID)
   product.value = respuesta
   console.log(product.value)
   selectedOptionLOCATION_PRODUCTS = ref('Selecciona un PRODUCTS')
@@ -407,6 +410,9 @@ const downloadTemplate = (queFichero: String) => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .image-section {
@@ -423,6 +429,7 @@ const downloadTemplate = (queFichero: String) => {
   width: 95%;
   height: 100%;
   border-radius: 15px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
 }
 
 .list-section {
@@ -448,6 +455,10 @@ const downloadTemplate = (queFichero: String) => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
 }
 
 .file-input-section {
@@ -461,7 +472,10 @@ const downloadTemplate = (queFichero: String) => {
 .file-input-section input {
   width: auto;
   height: 30px;
-  font-family: 'Outfit', sans-serif;
+}
+
+.file-input-section label {
+  margin-right: 5px;
 }
 
 .button-section {
@@ -481,6 +495,10 @@ const downloadTemplate = (queFichero: String) => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
 }
 
 .dropdown-section,
@@ -505,6 +523,7 @@ const downloadTemplate = (queFichero: String) => {
   border-radius: 25px;
   text-align: center;
   font-size: medium;
+  font-weight: bold;
 }
 
 .right-button-section button {

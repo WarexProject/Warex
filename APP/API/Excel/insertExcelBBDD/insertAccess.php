@@ -38,7 +38,7 @@ function insertarDatosACCESS ($ArDatos) {
         $userName = $mysqli->real_escape_string($userName);
         $companyID = $mysqli->real_escape_string($companyID);
         $password = $mysqli->real_escape_string($password);
-        $contrasenaHaseada = password_hash($password,PASSWORD_BCRYPT);
+        $contrasenaHaseada = password_hash($password, PASSWORD_DEFAULT);
         if (empty($lastName)) {
             $values[] = "('$DNI', '$name', '$userName', '$companyID', '$contrasenaHaseada')";
             $inserto = true;
