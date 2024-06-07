@@ -525,6 +525,18 @@ const downloadTemplate = (queFichero: String) => {
   font-size: medium;
   font-weight: bold;
 }
+.dropdown-section select {
+  border: none;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  font-size: large;
+  background-color: #2d3a4f;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  border-left: 7px solid var(--color-green-light);
+}
 
 .right-button-section button {
   margin-top: 0;
@@ -537,20 +549,19 @@ span {
 }
 
 button {
+  
   border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  background-color: var(--color-green-light);
+  border-radius: 5px;  cursor: pointer;
+  background-color: #2d3a4f;
   color: #fff;
   font-size: larger;
+  cursor: pointer;
+  transition-duration: 300ms;
 }
 
 button:hover {
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  background-color: var(--color-orange);
-  color: var(--color-green-light);
-  font-size: larger;
+  transform: scale(1.02);
 }
+
+
 </style>
