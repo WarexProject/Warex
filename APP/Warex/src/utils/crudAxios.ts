@@ -42,9 +42,10 @@ export const getDataByQuery = async (data: {sql: string})  => {
 
 export const updateData = async (table: string, id: string, field: string, newData: any) => {
     try {
-        await axios.put(`${BASEURL}/${table}/?${field}=${id}`, newData);
+        const response = await axios.put(`${BASEURL}/${table}?${field}=${id}`, newData);
+        return response.data
     } catch (error) {
-        console.log(error);
+        return false
     }
 };
 
