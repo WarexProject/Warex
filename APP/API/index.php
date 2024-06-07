@@ -1,9 +1,8 @@
 <?php
-
 header('Content-Type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
 // Manejar las solicitudes preflight (OPTIONS)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -137,23 +136,55 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 
 		break;
-	
-	case 'PUT':
 
-		$data = json_decode(file_get_contents('php://input'), true);
-		$table = isset($_GET['table']) ? $_GET['table'] : null;
-		if($table){
-			unset($_GET['table']);
-		}
-		$params = $_GET;
-		$affectedRows =  $validate->update($table, $params, $data);
-		$response = array(
-			'result' => 'ok',
-			'filas afectadas' => $affectedRows
-		);
-		Response::result(200, $response);
-		
-		break;
+		case 'PUT':
+
+			$data = json_decode(file_get_contents('php://input'), true);
+			$table = isset($_GET['table']) ? $_GET['table'] : null;
+			if($table){
+				unset($_GET['table']);
+			}
+			$params = $_GET;
+			$affectedRows =  $validate->update($table, $params, $data);
+			$response = array(
+				'result' => 'ok',
+				'filas afectadas' => $affectedRows
+			);
+			Response::result(200, $response);
+	
+			break;
+	
+		//FUNCIONA TODO MENOS HASHEAR LA CONTRASEÑA CUANDO SE LE CAMBIA A UN USUARIO EXISTENTE
+		// case 'PUT':
+		// 	$data = json_decode(file_get_contents('php://input'), true);
+		// 	$table = isset($_GET['table']) ? $_GET['table'] : null;
+		// 	$action = isset($_GET['accion']) ? $_GET['accion'] : null;
+	
+		// 	if ($table) {
+		// 		unset($_GET['table']);
+		// 	}
+		// 	if ($action && $action == 'changePasswd') {
+		// 		if (isset($data['Password'])) {
+		// 			$data['Password'] = password_hash($data['Password'], PASSWORD_DEFAULT);
+		// 		} else {
+		// 			$response = array(
+		// 				'result' => 'error',
+		// 				'details' => 'Password no proporcionada'
+		// 			);
+		// 			Response::result(400, $response);
+		// 			exit();
+		// 		}
+		// 	}
+
+		// 	$params = $_GET;
+		// 	$affectedRows = $validate->update($table, $params, $data);
+		// 	$response = array(
+		// 		'result' => 'ok',
+		// 		'filas afectadas' => $affectedRows
+		// 	);
+		// 	Response::result(200, $response);
+			
+		// 	break;
 
 	case 'DELETE': 
 

@@ -12,9 +12,9 @@ import 'vue3-easy-data-table/dist/style.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { faEye, faArrowLeft, faEyeSlash, faDatabase, faHome, faCloudUploadAlt, faChartBar, faUser, faBuilding, faWarehouse, faBox, faMagnifyingGlass, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faArrowLeft, faEyeSlash, faDatabase, faHome, faCloudUploadAlt, faChartBar, faUser, faBuilding, faWarehouse, faBox, faMagnifyingGlass, faRotateLeft, faGear, faWrench } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faLinkedin, faGithub, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
-library.add(faGithub, faLinkedin, faTwitter, faInstagram, faDiscord, faEye, faEyeSlash, faArrowLeft, faHome, faDatabase, faCloudUploadAlt, faChartBar, faUser, faBuilding,  faWarehouse, faBox, faMagnifyingGlass, faRotateLeft )
+library.add(faGithub, faLinkedin, faTwitter, faInstagram, faDiscord, faEye, faEyeSlash, faArrowLeft, faHome, faDatabase, faCloudUploadAlt, faChartBar, faUser, faBuilding,  faWarehouse, faBox, faMagnifyingGlass, faRotateLeft, faGear, faWrench )
 
 const app = createApp(App)
 

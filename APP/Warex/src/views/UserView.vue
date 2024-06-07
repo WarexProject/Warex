@@ -27,8 +27,9 @@ const closeModal = () => {
 
 const changeUserName = async () => {
   try{
-    const response = await updateData ('access','userName', newUsername.value);
-    console.log(response)
+    const response = await updateData('access', userStore.user.DNI, 'DNI', { "UserName": newUsername.value });
+    console.log(response);
+    closeModal();
   } catch (e) {
     console.log(e);
   }
@@ -36,8 +37,9 @@ const changeUserName = async () => {
 
 const changePassword = async () => {
   try{
-    const response = await updateData ('access','Password', newPassword.value);
-    console.log(response)
+    const response = await updateData('access', userStore.user.DNI, 'DNI', { "Password": newPassword.value });
+    console.log(response);
+    closeModal();
   } catch (e) {
     console.log(e);
   }
@@ -45,44 +47,44 @@ const changePassword = async () => {
 
 </script>
 
-
-
 <template>
-    
+  <div class="user-container-wrapper">
     <div class="user-container">
-
+      <font-awesome-icon icon="gear" class="userIcon" style="color: var(--color-green-light); font-size: 30px;" />
+      <h2 class="title">Gestionar mi cuenta</h2>
+      <hr>
       <div class="divBotones">
         <button @click="showModal('username')" class="action-button">Cambiar nombre de usuario</button>
         <button @click="showModal('password')" class="action-button">Cambiar contraseña</button>
       </div>
 
       <!-- Mandar correo -->
-    <div class="divCorreo">
-         <h4>¿Tienes alguna duda? Contacta con nosotros: </h4>
-         <button class="btnSendEmail">
-         <a href="mailto:warexdaw@gmail.com">Enviar correo</a>
-         </button>
-         <h4>¡Te responderemos lo antes posible!</h4>
-       </div>
+      <div class="divCorreo">
+        <h4>¿Tienes alguna duda? Contacta con nosotros: </h4>
+        <button class="btnSendEmail">
+          <a href="mailto:warexdaw@gmail.com">Enviar correo</a>
+        </button>
+        <h4>¡Te responderemos lo antes posible!</h4>
+      </div>
     </div>
 
-      <!-- Modal para cambiar nombre de usuario -->
-      <Modal v-if="isModalVisible && modalType === 'username'" @close="closeModal">
-        <h3 class="modal-title">CAMBIAR NOMBRE DE USUARIO</h3>
-        <input v-model="newUsername" class="input-space" placeholder="Nuevo nombre de usuario" />
-        <button @click="changeUserName()" class="confirm-button">Confirmar</button>
-        <button @click="closeModal" class="exit-button">Cancelar</button>
-      </Modal>
+    <!-- Modal para cambiar nombre de usuario -->
+    <Modal v-if="isModalVisible && modalType === 'username'" @close="closeModal">
+      <h3 class="modal-title">CAMBIAR NOMBRE DE USUARIO</h3>
+      <input v-model="newUsername" class="input-space" placeholder="Nuevo nombre de usuario" />
+      <button @click="changeUserName" class="confirm-button">Confirmar</button>
+      <button @click="closeModal" class="exit-button">Cancelar</button>
+    </Modal>
   
-      <!-- Modal para cambiar contraseña -->
-      <Modal v-if="isModalVisible && modalType === 'password'" @close="closeModal">
-        <h3 class="modal-title">CAMBIAR CONTRASEÑA</h3>
-        <input v-model="newPassword" type="password" class="input-space" placeholder="Nueva contraseña" />
-        <button @click="" class="confirm-button">Confirmar</button>
-        <button @click="closeModal" class="exit-button">Cancelar</button>
-      </Modal>
-
-</template> 
+    <!-- Modal para cambiar contraseña -->
+    <Modal v-if="isModalVisible && modalType === 'password'" @close="closeModal">
+      <h3 class="modal-title">CAMBIAR CONTRASEÑA</h3>
+      <input v-model="newPassword" type="password" class="input-space" placeholder="Nueva contraseña" />
+      <button @click="changePassword" class="confirm-button">Confirmar</button>
+      <button @click="closeModal" class="exit-button">Cancelar</button>
+    </Modal>
+  </div>
+</template>
   
 <style scoped>
   :root {
@@ -101,6 +103,29 @@ const changePassword = async () => {
   --color-orange-dark: #ff7f00;
 }
 
+.user-container-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  color: var(--color-green-light);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+hr {
+  margin-bottom: 40px;
+}
+.user-container {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width:50%;
+  text-align: center;
+}
+
 .action-button {
   padding: 10px 20px;
   font-size: 16px;
@@ -117,13 +142,6 @@ const changePassword = async () => {
   color: white;
 }
 
-.user-container {
-    display: block;
-    gap: 20px;
-    background-color: var(--color-blue-ultralight);
-    padding: 20px;
-    border-radius: 10px;
-  }
 
 .divBotones {
     flex-direction: column;

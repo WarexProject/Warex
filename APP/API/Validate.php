@@ -16,7 +16,7 @@ class Validate extends Database
 	private $locationGetFields = array('WarehouseID','ProductID','SectionID','ShelfID','TotalProductQuantity'); 
 	private $productGetFields = array('ProductID','ProductName','TotalProductQuantity','Description','UnitPrice','ExpiryDate', 'CompanyID');
 
-	private $accessPutFields = array('Name','LastName','UserName','Password','Permissions');
+	private $accessPutFields = array('DNI','Name','LastName','UserName','Password','Permissions','CompanyID');
 	private $companyPutFields = array('CompanyName'); 
 	private $warehousesPutFields = array('TotalProductQuantity','RefrigeratingChamber');
 	private $sectionPutFields = array('SectionName');
