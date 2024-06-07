@@ -40,25 +40,26 @@ export const getDataByQuery = async (data: {sql: string})  => {
     }
 };
 
-export const updateData = async (table: string, id: string, newData: any) => {
+export const updateData = async (table: string, id: string, field: string, newData: any) => {
     try {
-        await axios.put(`${BASEURL}/${table}/${id}`, newData);
+        await axios.put(`${BASEURL}/${table}/?${field}=${id}`, newData);
     } catch (error) {
         console.log(error);
     }
 };
+
 
 export const updateFieldData = async (table: string, id: string, field: string, value: any) => {
     try {
-        await axios.patch(`${BASEURL}/${table}/${id}`, { [field]: value });
+        await axios.patch(`${BASEURL}/${table}/${id}`, {[field]: value });
     } catch (error) {
         console.log(error);
     }
 };
 
-export const deleteData = async (table: string, id: string) => {
+export const deleteData = async (table: string, id: string, field: string) => {
     try {
-        await axios.delete(`${BASEURL}/${table}/${id}`);
+        await axios.delete(`${BASEURL}/${table}/?${field}=${id}`);
     } catch (error) {
         console.log(error);
     }
