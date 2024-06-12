@@ -84,7 +84,7 @@
   <div class="modalOverlay" @click.self="closeModal" v-if="showModal">
     <div class="modalCont">
       <div class="modalData" v-if="selectedTable.ing == 'warehouses'">
-        <h2 class="modalTitle">Añadir Almacén</h2>
+        <h2 class="modalTitle">{{isEditing ? 'Editar' : 'Añadir'}} Almacén</h2>
         <div class="modalInputs">
           <div class="inputLine">
             <div class="inputTitle">ID Almacén: </div>
@@ -103,7 +103,7 @@
         </div>
       </div>
       <div class="modalData" v-if="selectedTable.ing == 'products'">
-        <h2 class="modalTitle">Añadir Producto</h2>
+        <h2 class="modalTitle">{{isEditing ? 'Editar' : 'Añadir'}} Producto</h2>
         <div class="modalInputs">
           <div class="inputLine">
             <div class="inputTitle">ID Compañía: </div>
@@ -142,7 +142,7 @@
         </div>
       </div>
       <div class="modalData" v-if="selectedTable.ing == 'section'">
-          <h2 class="modalTitle">Añadir Sección</h2>
+          <h2 class="modalTitle">{{isEditing ? 'Editar' : 'Añadir'}} Sección</h2>
           <div class="modalInputs">
             <div class="inputLine">
               <div class="inputTitle">ID Sección: </div>
@@ -163,7 +163,7 @@
           </div>
       </div>
       <div class="modalData" v-if="selectedTable.ing == 'shelf'">
-          <h2 class="modalTitle">Añadir Estantería</h2>
+          <h2 class="modalTitle">{{isEditing ? 'Editar' : 'Añadir'}} Estantería</h2>
           <div class="modalInputs">
             <div class="inputLine">
               <div class="inputTitle">ID Estantería: </div>
@@ -461,7 +461,7 @@ const clickEditElement = async () => {
       newWarehouse.value.RefrigeratingChamber = newWarehouse.value.RefrigeratingChamber ? '1' : '0'
       response = await updateData('warehouses', selectedWarehouse.value?.WarehouseID, 'WarehouseID' ,newWarehouse.value)
       break
-    case 'products':
+    case 'products':  
       response = await updateData('products', selectedProduct.value?.ProductID, 'ProductID' ,newProduct.value)
       break
     case 'section':
@@ -511,9 +511,7 @@ const resetInputs = () => {
   }
 }
 
-const resetUpdateInputs = () => {
 
-}
 
 </script>
 

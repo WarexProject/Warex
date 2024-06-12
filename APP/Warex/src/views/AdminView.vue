@@ -85,7 +85,7 @@
 import { ref } from 'vue';
 import Modal from '@/components/ModalComp.vue';
 import axios from 'axios';
-import { saveData, updateData, deleteData } from '@/utils/crudAxios';
+import { saveData, updateData, deleteData, updatePassword } from '@/utils/crudAxios';
 
 const isModalVisible = ref(false);
 const modalType = ref('');
@@ -155,7 +155,7 @@ const deleteUser = async () => {
 
 
 const changePasswd = async () => {
-  await updateData ('access',updatePasswdDNI.value,'DNI',{"Password": updatePAsswd.value});
+  await updatePassword (updatePasswdDNI.value, {"Password": updatePAsswd.value});
   alert("Contraseña modificada con éxito.")
 }
 

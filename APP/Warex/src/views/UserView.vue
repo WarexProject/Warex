@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { ref } from 'vue';
 import Modal from '@/components/ModalComp.vue';
-import { updateData } from '@/utils/crudAxios';
+import { updateData, updatePassword } from '@/utils/crudAxios';
 import { useUserStore } from '@/stores/userStore';
 
 const userStore = useUserStore();
@@ -37,7 +37,7 @@ const changeUserName = async () => {
 
 const changePassword = async () => {
   try{
-    const response = await updateData('access', userStore.user.DNI, 'DNI', { "Password": newPassword.value });
+    const response = await updatePassword(userStore.user?.DNI, { "Password": newPassword.value });
     console.log(response);
     closeModal();
   } catch (e) {

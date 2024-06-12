@@ -132,17 +132,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		break;
 
+
 	case 'PUT':
-		$data = json_decode(file_get_contents('php://input'), true);
-		$table = isset($_GET['table']) ? $_GET['table'] : null;
+		$putData = json_decode(file_get_contents('php://input'), true);
+		$putTable = isset($_GET['table']) ? $_GET['table'] : null;
 		$action = isset($_GET['accion']) ? $_GET['accion'] : null;
 
-		if ($table) {
+		if ($putTable) {
 			unset($_GET['table']);
 		}
 		if ($action && $action == 'changePasswd') {
-			if (isset($data['Password'])) {
-				$data['Password'] = password_hash($data['Password'], PASSWORD_DEFAULT);
+			if (isset($putData['Password'])) {
+				$putData['Password'] = password_hash($putData['Password'], PASSWORD_DEFAULT);
 			} else {
 				$response = array(
 					'result' => 'error',
@@ -154,8 +155,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			unset($_GET['accion']);
 		}
 
-		$params = $_GET;
-		$affectedRows = $validate->update($table, $params, $data);
+		$putParams = $_GET;
+		$affectedRows = $validate->update($putTable, $putParams, $putData);
 		$response = array(
 			'result' => 'ok',
 			'filas afectadas' => $affectedRows

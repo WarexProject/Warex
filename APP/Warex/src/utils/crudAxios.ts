@@ -41,8 +41,21 @@ export const getDataByQuery = async (data: {sql: string})  => {
 };
 
 export const updateData = async (table: string, id: string, field: string, newData: any) => {
+    if (newData.hasOwnProperty('isSelected')) {
+        delete newData.isSelected;
+    }
     try {
         const response = await axios.put(`${BASEURL}/${table}?${field}=${id}`, newData);
+        return response.data
+    } catch (error) {
+        return false
+    }
+};
+
+export const updatePassword = async ( DNI: string, newData: any) => {
+
+    try {
+        const response = await axios.put(`${BASEURL}/access?accion=changePasswd&DNI=${DNI}`, newData);
         return response.data
     } catch (error) {
         return false
